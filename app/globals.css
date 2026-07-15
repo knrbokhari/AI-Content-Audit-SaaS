@@ -68,6 +68,7 @@
   --accent: #f5f5f5;
   --accent-foreground: #171717;
   --destructive: #e7000b;
+  --success: #16a34a;
   --border: #E2E6ED;
   --input: #e5e5e5;
   --ring: #a1a1a1;
@@ -106,6 +107,7 @@
   --accent: #262626;
   --accent-foreground: #fafafa;
   --destructive: #ff6467;
+  --success: #22c55e;
   --border: #ffffff1a;
   --input: #ffffff26;
   --ring: #737373;
@@ -181,5 +183,17 @@
   .dark .sidebar-item.active {
     background: rgba(77,142,247,0.12);
     color: #78A7F9;
+  }
+
+  /* Sonner toast styling */
+  .cn-toast-success {
+    background: var(--success) !important;
+    border-color: var(--success) !important;
+    color: #fafafa !important;
+  }
+  .cn-toast-error {
+    background: var(--destructive) !important;
+    border-color: var(--destructive) !important;
+    color: #fafafa !important;
   }
 }

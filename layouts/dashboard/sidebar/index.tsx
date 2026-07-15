@@ -45,6 +45,7 @@ const MenuItem = ({ item, collapsed, isActive }: any) => (
     {!collapsed && <span>{item.label}</span>}
   </Link>
 );
+
 const useAuth = () => {
   return {};
 };
