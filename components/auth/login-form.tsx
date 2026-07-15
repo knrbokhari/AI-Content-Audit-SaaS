@@ -22,6 +22,9 @@ import React, { useState } from "react";
 import { ArrowRight, CopyIcon, Smartphone } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import { userAtom } from "@/atoms/userAtom";
+import { permissionsAtom } from "@/atoms/permissionAtom";
 
 const TwoFAStep = ({
   onBack,
@@ -31,6 +34,7 @@ const TwoFAStep = ({
   authData: any;
 }) => {
   const router = useRouter();
+  const [permissions, setPermissions] = useAtom(permissionsAtom);
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -63,8 +67,13 @@ const TwoFAStep = ({
     setLoading(true);
     setError("");
     try {
-      await apiVerify2FA({ code: full, tempToken: authData?.tempToken });
+      const res = await apiVerify2FA({
+        code: full,
+        tempToken: authData?.tempToken,
+      });
       toast.success("Welcome back!");
+      localStorage.setItem("auth_token", res?.token);
+      setPermissions(res?.permissions || []);
       router.push("/");
     } catch (err: any) {
       toast.error(err?.response?.data?.message || err.message);
@@ -257,8 +266,11 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const [currentUser, setUser] = useAtom(userAtom);
+  const [permissions, setPermissions] = useAtom(permissionsAtom);
+
   const router = useRouter();
-  const [step, setStep] = useState("2fa"); // 'login' | '2fa'
+  const [step, setStep] = useState("login"); // 'login' | '2fa'
   const [authedData, setAuthedData] = useState({});
 
   const formik = useFormik({
@@ -292,6 +304,7 @@ export function LoginForm({
         toast.success("Welcome back!");
         localStorage.setItem("auth_token", res?.token);
         // setUser({ user: res?.user, isAuthenticated: true, errors: null });
+        setPermissions(res?.permissions || []);
         router.push("/");
       }
     },
