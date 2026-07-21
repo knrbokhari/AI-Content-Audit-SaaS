@@ -5,7 +5,6 @@
 import React, { useState } from "react";
 import { clsx } from "clsx";
 import {
-  Shield,
   LayoutDashboard,
   Users,
   Building2,
@@ -19,6 +18,9 @@ import {
   CreditCard,
   ChevronDown,
   PencilSparkles,
+  UserRoundCog,
+  MonitorCog,
+  UserRoundCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,6 +28,9 @@ import Avatar from "@/components/common/Avatar";
 
 const MENU = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/" },
+  { label: "Roles", icon: UserRoundCog, to: "/role" },
+  { label: "Resources", icon: MonitorCog, to: "/resource" },
+  { label: "Permissions", icon: UserRoundCheck, to: "/permission" },
   { label: "Organizations", icon: Building2, to: "/organizations" },
   { label: "Customers", icon: Briefcase, to: "/customers" },
   { label: "Subscriptions", icon: CreditCard, to: "/subscriptions" },
