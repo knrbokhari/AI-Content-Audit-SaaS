@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Card } from "../ui/card";
 
-interface Role {
+export interface Role {
   id: number | string;
   name: string;
   isSystem: boolean;

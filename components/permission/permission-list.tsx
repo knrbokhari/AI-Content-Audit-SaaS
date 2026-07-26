@@ -19,36 +19,41 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getResources, deleteResource } from "@/services/api";
+import { getPermissions, deletePermission } from "@/services/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Card } from "../ui/card";
 import formatDate from "@/utils/formatDate";
 
-export interface Resource {
+interface Permission {
   id: number | string;
-  name: string;
-  slug: string;
+  role: {
+    name: string;
+  };
+  resource: {
+    name: string;
+  };
+  action: string;
   createdAt: string;
 }
 
-export const ResourceList = () => {
-  const [resources, setResources] = useState<Resource[]>([]);
+export const PermissionList = () => {
+  const [permissions, setPermissions] = useState<Permission[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
+  const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
-  const fetchResources = async () => {
+  const fetchPermissions = async () => {
     try {
       setLoading(true);
-      const data = await getResources();
-      setResources(data?.data);
+      const data = await getPermissions();
+      setPermissions(data?.data);
     } catch (error) {
-      console.error("Error fetching resources:", error);
-      toast.error("Failed to fetch resources");
+      console.error("Error fetching permissions:", error);
+      toast.error("Failed to fetch permissions");
     } finally {
       setLoading(false);
     }
@@ -56,32 +61,32 @@ export const ResourceList = () => {
 
 
   useEffect(() => {
-    fetchResources();
+    fetchPermissions();
   }, []);
 
   const handleEdit = (id: number | string) => {
-    router.push(`/resource/${id}/edit`);
+    router.push(`/permission/${id}/edit`);
   };
 
-  const handleDeleteClick = (resource: Resource) => {
-    setSelectedResource(resource);
+  const handleDeleteClick = (permission: Permission) => {
+    setSelectedPermission(permission);
     setDeleteDialogOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
-    if (!selectedResource) return;
+    if (!selectedPermission) return;
 
     try {
       setIsDeleting(true);
-      await deleteResource(selectedResource.id);
-      toast.success("Resource deleted successfully");
+      await deletePermission(selectedPermission.id);
+      toast.success("Permission deleted successfully");
       setDeleteDialogOpen(false);
-      setSelectedResource(null);
-      // Refresh roles list
-      fetchResources();
+      setSelectedPermission(null);
+      // Refresh Permission list
+      fetchPermissions();
     } catch (error) {
-      console.error("Error deleting role:", error);
-      toast.error("Failed to delete role");
+      console.error("Error deleting permission:", error);
+      toast.error("Failed to delete permission");
     } finally {
       setIsDeleting(false);
     }
@@ -102,39 +107,41 @@ export const ResourceList = () => {
         <TableHeader>
           <TableRow>
             <TableHead>SL</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Slug</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Resource</TableHead>
+            <TableHead>Permission</TableHead>
             <TableHead>Created At</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {resources.length === 0 ? (
+          {permissions.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={3} className="text-center">
-                No roles found
+              <TableCell colSpan={6} className="text-center">
+                No permissions found
               </TableCell>
             </TableRow>
           ) : (
-            resources.map((role, index) => (
-              <TableRow key={role.id}>
+            permissions.map((item, index) => (
+              <TableRow key={item.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{role.name}</TableCell>
-                <TableCell>{role.slug}</TableCell>
-                <TableCell>{formatDate(role.createdAt)}</TableCell>
+                <TableCell>{item?.role?.name}</TableCell>
+                <TableCell>{item?.resource?.name}</TableCell>
+                <TableCell>{item?.action}</TableCell>
+                <TableCell>{formatDate(item.createdAt)}</TableCell>
                 <TableCell>
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleEdit(role.id)}
+                      onClick={() => handleEdit(item.id)}
                     >
                       Edit
                     </Button>
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => handleDeleteClick(role)}
+                      onClick={() => handleDeleteClick(item)}
                     >
                       Delete
                     </Button>
@@ -152,8 +159,7 @@ export const ResourceList = () => {
           <DialogHeader>
             <DialogTitle>Confirm Delete</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the role &ldquo;
-              {selectedResource?.name}&rdquo;? This action cannot be undone.
+              Are you sure you want to delete this Permission? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
