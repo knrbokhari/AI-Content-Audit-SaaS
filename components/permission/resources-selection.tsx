@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import SelectInput from '@/components/ui/select-input';
-import { useEffect, useState } from 'react';
-import { Control } from 'react-hook-form';
-import { Label } from '@/components/ui/label';
-import ValidationError from '@/components/ui/form-validation-error';
-import { getResources } from '@/services/api';
-import { Resource } from '@/components/resource/resource-list';
-import { PermissionFormValues } from './permission-from';
+import SelectInput from "@/components/ui/select-input";
+import { useEffect, useState } from "react";
+import { Control } from "react-hook-form";
+import { Label } from "@/components/ui/label";
+import ValidationError from "@/components/ui/form-validation-error";
+import { getResources } from "@/services/api";
+import { Resource } from "@/components/resource/resource-list";
+import { PermissionFormValues } from "./permission-from";
 
 interface Props {
   control: Control<PermissionFormValues>;
@@ -25,18 +25,24 @@ const PermissionResourceInput = ({
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
 
-   const fetchResources = async () => {
+  const fetchResources = async () => {
     try {
       setLoading(true);
       const data = await getResources();
       setResources(data?.data);
+
+      if (defaultValue) {
+        const selected = data?.data?.find((r: any) => r.id === Number(defaultValue));
+        if (selected) {
+          setValue("resourceId", selected);
+        }
+      }
     } catch (error) {
       console.error("Error fetching resources:", error);
     } finally {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchResources();
@@ -52,8 +58,7 @@ const PermissionResourceInput = ({
         getOptionValue={(option: any) => option.id}
         options={resources!}
         isLoading={loading}
-                isClearable={true}
-
+        isClearable={true}
       />
       <ValidationError message={error!} />
     </div>

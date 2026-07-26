@@ -99,15 +99,20 @@ export function PermissionForm({
               <PermissionRoleInput
                 control={control}
                 error={errors.roleId?.message}
+                defaultValue={initialValues.roleId?.toString()}
+                setValue={setValue}
               />
               <PermissionResourceInput
                 control={control}
                 error={errors.resourceId?.message}
+                defaultValue={initialValues.resourceId?.toString()}
+                setValue={setValue}
               />
               <PermissionAccessInput
                 control={control}
                 error={errors.action?.message}
                 setValue={setValue}
+                defaultValue={initialValues.action}
               />
             </CardContent>
           </Card>
@@ -131,5 +136,3 @@ export function PermissionForm({
     </div>
   );
 }
-
-

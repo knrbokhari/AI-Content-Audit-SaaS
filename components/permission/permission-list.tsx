@@ -42,7 +42,8 @@ export const PermissionList = () => {
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null);
+  const [selectedPermission, setSelectedPermission] =
+    useState<Permission | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
@@ -58,7 +59,6 @@ export const PermissionList = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchPermissions();
@@ -104,54 +104,54 @@ export const PermissionList = () => {
     <div>
       <Card className="!p-4">
         <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>SL</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Resource</TableHead>
-            <TableHead>Permission</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {permissions.length === 0 ? (
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={6} className="text-center">
-                No permissions found
-              </TableCell>
+              <TableHead>SL</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Resource</TableHead>
+              <TableHead>Permission</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
-          ) : (
-            permissions.map((item, index) => (
-              <TableRow key={item.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{item?.role?.name}</TableCell>
-                <TableCell>{item?.resource?.name}</TableCell>
-                <TableCell>{item?.action}</TableCell>
-                <TableCell>{formatDate(item.createdAt)}</TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(item.id)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDeleteClick(item)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
+          </TableHeader>
+          <TableBody>
+            {permissions.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center">
+                  No permissions found
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : (
+              permissions.map((item, index) => (
+                <TableRow key={item.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item?.role?.name}</TableCell>
+                  <TableCell>{item?.resource?.name}</TableCell>
+                  <TableCell>{item?.action}</TableCell>
+                  <TableCell>{formatDate(item.createdAt)}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(item.id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDeleteClick(item)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
       </Card>
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
@@ -159,7 +159,8 @@ export const PermissionList = () => {
           <DialogHeader>
             <DialogTitle>Confirm Delete</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this Permission? This action cannot be undone.
+              Are you sure you want to delete this Permission? This action
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

@@ -26,6 +26,15 @@ const PermissionAccessInput = ({
     { name: "Delete", value: "delete" },
   ];
 
+  useEffect(() => {
+    if (defaultValue) {
+      const selected = actions.find((r: any) => r.value === defaultValue);
+      if (selected) {
+        setValue("action", selected);
+      }
+    }
+  }, []);
+
   return (
     <div className="mb-5">
       <Label className="mb-2 block">Access*</Label>

@@ -1,53 +1,54 @@
- 
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
-import { ResourceForm } from "@/components/resource/resource-from";
+import { PermissionForm } from "@/components/permission/permission-from";
 import { SiteHeader } from "@/components/ui/site-header";
 import { LoadingSpinner } from "@/components/ui/spinner";
-import { getResource } from "@/services/api";
+import { getPermission } from "@/services/api";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const page = () => {
   const params = useParams<{ slug: string }>();
   const [isLoading, setIsLoading] = useState(true);
-  const [resourceData, setResourceData] = useState<{
-    name: string;
+  const [data, setData] = useState<{
+    action: string;
     id?: string | number | undefined;
+    resourceId: number;
+    roleId: number;
   } | null>(null);
 
   useEffect(() => {
-    const fetchResource = async () => {
+    const fetchPermission = async () => {
       try {
-        const data = await getResource(params.slug);
-        setResourceData(data);
+        const data = await getPermission(params.slug);
+        setData(data);
       } catch (error) {
-        console.error("Error fetching resource:", error);
+        console.error("Error fetching permission:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchResource();
+    fetchPermission();
   }, [params.slug]);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  if (!resourceData) {
+  if (!data) {
     return (
       <div className="text-center mt-10">
-        <p className="text-red-500">Resource not found.</p>
+        <p className="text-red-500">Permission not found.</p>
       </div>
     );
   }
 
   return (
     <div>
-      <SiteHeader title="Update Resource">{params.slug}</SiteHeader>
-      <ResourceForm initialValues={resourceData} />
+      <SiteHeader title="Update Permission"></SiteHeader>
+      <PermissionForm initialValues={data} />
     </div>
   );
 };
