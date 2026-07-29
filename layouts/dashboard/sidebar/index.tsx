@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 /* eslint-disable react-hooks/static-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -25,6 +25,8 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Avatar from "@/components/common/Avatar";
+import { useAtom } from "jotai";
+import { userAtom } from "@/atoms/userAtom";
 
 const MENU = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/" },
@@ -51,18 +53,18 @@ const MenuItem = ({ item, collapsed, isActive }: any) => (
   </Link>
 );
 
-const useAuth = () => {
-  return {};
-};
 const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
-  const { user, logout, primaryRole, hasRole }: any = useAuth();
+  const [currentUser, setUser] = useAtom(userAtom);
   const [showProfile, setShowProfile] = useState(false);
   const router = useRouter();
 
   const menu = MENU;
 
+  console.log("currentUser", currentUser);
+
   const handleLogout = () => {
-    logout();
+    setUser(null);
+    localStorage.removeItem("auth_token");
     router.push("/login");
   };
 
@@ -121,14 +123,20 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
             collapsed && "justify-center",
           )}
         >
-          <Avatar name={"user?.fullName"} size="sm" />
+          <Avatar name={currentUser?.name} size="sm" />
           {!collapsed && (
             <>
               <div className="flex-1 text-left min-w-0">
-                <p className="text-xs font-600 truncate">Knr Naeem</p>
-                <p className="text-xs truncate">naeem@email.com</p>
+                <p className="text-xs font-600 truncate">{currentUser?.name}</p>
+                <p className="text-xs truncate">{currentUser?.email}</p>
               </div>
-              <ChevronDown size={13} className={clsx('shrink-0 transition-transform', showProfile && 'rotate-180')} />
+              <ChevronDown
+                size={13}
+                className={clsx(
+                  "shrink-0 transition-transform",
+                  showProfile && "rotate-180",
+                )}
+              />
             </>
           )}
         </button>
