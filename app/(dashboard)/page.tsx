@@ -1,26 +1,58 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/ui/site-header";
 import { KPICard } from "@/components/ui/kpi-card";
 import { Users, DollarSign, TrendingUp } from "lucide-react";
-import { RecentOrganizationsTable } from "@/components/ui/recent-organizations-table";
-import { RecentPaymentsTable } from "@/components/ui/recent-payments-table";
+import { RecentOrganizationsTable } from "@/components/dashboard/recent-organizations-table";
+import { RecentPaymentsTable } from "@/components/dashboard/recent-payments-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RecentWebsiteAuditsTable } from "@/components/ui/recent-website-audits-table";
-import { LatestUserRegistrationsTable } from "@/components/ui/latest-user-registration-table";
+import { RecentWebsiteAuditsTable } from "@/components/dashboard/recent-website-audits-table";
+import { LatestUserRegistrationsTable } from "@/components/dashboard/latest-user-registration-table";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="space-y-6 p-4">
       <SiteHeader title="Dashboard">
-        <Button size="lg" variant="default">
+        <Button
+          onClick={() => router.push("/website-audits/create")}
+          size="lg"
+          variant="default"
+        >
           Create Audit
         </Button>
       </SiteHeader>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Total Users" value={1200} percentage={12} icon={Users} />
-        <KPICard title="Revenue" value="$45k" percentage={8} icon={DollarSign} />
-        <KPICard title="Growth" value="+3.5%" percentage={3.5} icon={TrendingUp} />
-        <KPICard title="Growth" value="+3.5%" percentage={3.5} icon={TrendingUp} />
+        <KPICard
+          title="Total Users"
+          value={1200}
+          percentage={12}
+          icon={Users}
+          color={undefined}
+        />
+        <KPICard
+          title="Revenue"
+          value="$45k"
+          percentage={8}
+          icon={DollarSign}
+          color={undefined}
+        />
+        <KPICard
+          title="Growth"
+          value="+3.5%"
+          percentage={3.5}
+          icon={TrendingUp}
+          color={undefined}
+        />
+        <KPICard
+          title="Growth"
+          value="+3.5%"
+          percentage={3.5}
+          icon={TrendingUp}
+          color={undefined}
+        />
       </div>
       <div className="grid grid-cols-1 gap-6">
         <Card>

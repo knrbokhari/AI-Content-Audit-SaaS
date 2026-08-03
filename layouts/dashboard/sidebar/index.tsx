@@ -29,17 +29,48 @@ import { useAtom } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
 
 const MENU = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/" },
-  { label: "Roles", icon: UserRoundCog, to: "/role" },
-  { label: "Resources", icon: MonitorCog, to: "/resource" },
-  { label: "Permissions", icon: UserRoundCheck, to: "/permission" },
-  { label: "Organizations", icon: Building2, to: "/organizations" },
-  { label: "Customers", icon: Briefcase, to: "/customers" },
-  { label: "Subscriptions", icon: CreditCard, to: "/subscriptions" },
-  { label: "Branding", icon: Palette, to: "/branding" },
-  { label: "Team", icon: Users, to: "/users" },
-  { label: "Reports", icon: BarChart3, to: "/reports" },
-  { label: "Settings", icon: Settings, to: "/settings" },
+  { label: "Dashboard", icon: LayoutDashboard, to: "/", permission: ":view" },
+  { label: "Roles", icon: UserRoundCog, to: "/role", permission: ":view" },
+  {
+    label: "Resources",
+    icon: MonitorCog,
+    to: "/resource",
+    permission: ":view",
+  },
+  {
+    label: "Permissions",
+    icon: UserRoundCheck,
+    to: "/permission",
+    permission: ":view",
+  },
+  {
+    label: "Organizations",
+    icon: Building2,
+    to: "/organizations",
+    permission: ":view",
+  },
+  {
+    label: "Website Audits",
+    icon: Building2,
+    to: "/website-audits",
+    permission: ":view",
+  },
+  {
+    label: "Customers",
+    icon: Briefcase,
+    to: "/customers",
+    permission: ":view",
+  },
+  {
+    label: "Subscriptions",
+    icon: CreditCard,
+    to: "/subscriptions",
+    permission: ":view",
+  },
+  { label: "Branding", icon: Palette, to: "/branding", permission: ":view" },
+  { label: "Team", icon: Users, to: "/users", permission: ":view" },
+  { label: "Reports", icon: BarChart3, to: "/reports", permission: ":view" },
+  { label: "Settings", icon: Settings, to: "/settings", permission: ":view" },
 ];
 
 const MenuItem = ({ item, collapsed, isActive }: any) => (
@@ -59,8 +90,6 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
   const router = useRouter();
 
   const menu = MENU;
-
-  console.log("currentUser", currentUser);
 
   const handleLogout = () => {
     setUser(null);
