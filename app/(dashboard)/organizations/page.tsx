@@ -5,7 +5,7 @@ import React from "react";
 const page = () => {
   return (
     <div>
-      <SiteHeader title="Website Audits Details"></SiteHeader>
+      <SiteHeader title="Organizations list"></SiteHeader>
       <OrganizationsList />
     </div>
   );
