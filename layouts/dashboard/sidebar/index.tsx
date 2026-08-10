@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 "use client";
 
 /* eslint-disable react-hooks/static-components */
@@ -23,54 +24,105 @@ import {
   UserRoundCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Avatar from "@/components/common/Avatar";
 import { useAtom } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
+import { Permissions } from "@/lib/permissions";
+import Can from "@/components/guards/CanView";
 
 const MENU = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/", permission: ":view" },
-  { label: "Roles", icon: UserRoundCog, to: "/role", permission: ":view" },
+  {
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    to: "/",
+    permissions: [Permissions.Dashboard.View, Permissions.AdminDashboard.View],
+    require: "any",
+  },
+  {
+    label: "Roles",
+    icon: UserRoundCog,
+    to: "/role",
+    permissions: [Permissions.Role.View],
+    require: "all",
+  },
   {
     label: "Resources",
     icon: MonitorCog,
     to: "/resource",
-    permission: ":view",
+    permissions: [Permissions.Resource.View],
+    require: "all",
   },
   {
     label: "Permissions",
     icon: UserRoundCheck,
     to: "/permission",
-    permission: ":view",
+    permissions: [Permissions.Permission.View],
+    require: "all",
   },
   {
     label: "Organizations",
     icon: Building2,
     to: "/organizations",
-    permission: ":view",
+    permissions: [Permissions.Organizations.View],
+    require: "all",
   },
   {
     label: "Website Audits",
     icon: Building2,
     to: "/website-audits",
-    permission: ":view",
+    permissions: [Permissions.WebsiteAudits.View],
+    require: "all",
   },
   {
     label: "Customers",
     icon: Briefcase,
     to: "/customers",
-    permission: ":view",
+    permissions: [Permissions.Customers.View],
+    require: "all",
   },
   {
     label: "Subscriptions",
     icon: CreditCard,
     to: "/subscriptions",
-    permission: ":view",
+    permissions: [Permissions.Subscriptions.View],
+    require: "all",
   },
-  { label: "Branding", icon: Palette, to: "/branding", permission: ":view" },
-  { label: "Team", icon: Users, to: "/users", permission: ":view" },
-  { label: "Reports", icon: BarChart3, to: "/reports", permission: ":view" },
-  { label: "Settings", icon: Settings, to: "/settings", permission: ":view" },
+  {
+    label: "Plan",
+    icon: CreditCard,
+    to: "/plan",
+    permissions: [Permissions.Plans.View],
+    require: "all",
+  },
+  {
+    label: "Branding",
+    icon: Palette,
+    to: "/branding",
+    permissions: [Permissions.Branding.View],
+    require: "all",
+  },
+  {
+    label: "Team",
+    icon: Users,
+    to: "/users",
+    permissions: [Permissions.Team.View],
+    require: "all",
+  },
+  {
+    label: "Reports",
+    icon: BarChart3,
+    to: "/reports",
+    permissions: [Permissions.Reports.View],
+    require: "all",
+  },
+  {
+    label: "Settings",
+    icon: Settings,
+    to: "/settings",
+    permissions: [Permissions.Settings.View],
+    require: "all",
+  },
 ];
 
 const MenuItem = ({ item, collapsed, isActive }: any) => (
@@ -88,6 +140,7 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
   const [currentUser, setUser] = useAtom(userAtom);
   const [showProfile, setShowProfile] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const menu = MENU;
 
@@ -133,7 +186,14 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
       {/* Nav */}
       <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
         {menu.map((item) => (
-          <MenuItem key={item.to} item={item} collapsed={collapsed} />
+          <Can permissions={item.permissions} require="any">
+            <MenuItem
+              key={item.to}
+              item={item}
+              collapsed={collapsed}
+              isActive={pathname === item.to}
+            />
+          </Can>
         ))}
       </nav>
 
