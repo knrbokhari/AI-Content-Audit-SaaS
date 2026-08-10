@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/ui/site-header";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { PermissionList } from "@/components/permission/permission-list";
+import PermissionGuard from "@/components/guards/PermissionGuard";
+import { Permissions } from "@/lib/permissions";
 
 const Page = () => {
   const router = useRouter();
   return (
-    <div>
+    <PermissionGuard permission={Permissions.Permission.View}>
       <SiteHeader title="Permission List">
         <Button
           size="lg"
@@ -21,7 +23,7 @@ const Page = () => {
       <div className="p-4">
         <PermissionList />
       </div>
-    </div>
+    </PermissionGuard>
   );
 };
 

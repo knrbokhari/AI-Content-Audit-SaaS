@@ -25,6 +25,8 @@ import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Card } from "../ui/card";
 import formatDate from "@/utils/formatDate";
+import Can from "../guards/CanView";
+import { Permissions } from "@/lib/permissions";
 
 interface Permission {
   id: number | string;
@@ -111,7 +113,15 @@ export const PermissionList = () => {
               <TableHead>Resource</TableHead>
               <TableHead>Permission</TableHead>
               <TableHead>Created At</TableHead>
-              <TableHead>Action</TableHead>
+              <Can
+                permissions={[
+                  Permissions.Permission.Update,
+                  Permissions.Permission.Update,
+                ]}
+                require="any"
+              >
+                <TableHead>Action</TableHead>
+              </Can>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -129,24 +139,36 @@ export const PermissionList = () => {
                   <TableCell>{item?.resource?.name}</TableCell>
                   <TableCell>{item?.action}</TableCell>
                   <TableCell>{formatDate(item.createdAt)}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(item.id)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeleteClick(item)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
+                  <Can
+                    permissions={[
+                      Permissions.Permission.Update,
+                      Permissions.Permission.Update,
+                    ]}
+                    require="any"
+                  >
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Can permission={Permissions.Permission.Update}>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(item.id)}
+                          >
+                            Edit
+                          </Button>
+                        </Can>
+                        <Can permission={Permissions.Permission.Delete}>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDeleteClick(item)}
+                          >
+                            Delete
+                          </Button>
+                        </Can>
+                      </div>
+                    </TableCell>
+                  </Can>
                 </TableRow>
               ))
             )}

@@ -68,5 +68,8 @@ const PermissionRoleInput = ({
 export default PermissionRoleInput;
 
 
-// Curious, manusher nam, kotha bote gele karon lage, 
-// chingri mach khai karon puka mach na, 
+// micir ali:  Curious, manusher nam, kotha bote gele karon lage, kaoke dekhe kichuta ideya kore boledoay
+// think and 2+2, 
+// meyeta:  chingri mach khai karon puka mach na, say everything in details
+
+

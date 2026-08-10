@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
+import PermissionGuard from "@/components/guards/PermissionGuard";
 import { PermissionForm } from "@/components/permission/permission-from";
 import { SiteHeader } from "@/components/ui/site-header";
 import { LoadingSpinner } from "@/components/ui/spinner";
+import { Permissions } from "@/lib/permissions";
 import { getPermission } from "@/services/api";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -46,10 +48,10 @@ const page = () => {
   }
 
   return (
-    <div>
+    <PermissionGuard permission={Permissions.Permission.Update}>
       <SiteHeader title="Update Permission"></SiteHeader>
       <PermissionForm initialValues={data} />
-    </div>
+    </PermissionGuard>
   );
 };
 

@@ -1,11 +1,101 @@
 export const Permissions = {
+  Dashboard: {
+    View: "dashboard:view",
+    Create: "dashboard:create",
+    Update: "dashboard:update",
+    Delete: "dashboard:delete",
+  },
+  AdminDashboard: {
+    View: "admin-dashboard:view",
+    Create: "admin-dashboard:create",
+    Update: "admin-dashboard:update",
+    Delete: "admin-dashboard:delete",
+  },
+  Resource: {
+    View: "resource:view",
+    Create: "resource:create",
+    Update: "resource:update",
+    Delete: "resource:delete",
+  },
+  Role: {
+    View: "role:view",
+    Create: "role:create",
+    Update: "role:update",
+    Delete: "role:delete",
+  },
+  Permission: {
+    View: "permission:view",
+    Create: "permission:create",
+    Update: "permission:update",
+    Delete: "permission:delete",
+  },
+  Subscriptions: {
+    View: "subscriptions:view",
+    Create: "subscriptions:create",
+    Update: "subscriptions:update",
+    Delete: "subscriptions:delete",
+  },
+  Settings: {
+    View: "settings:view",
+    Create: "settings:create",
+    Update: "settings:update",
+    Delete: "settings:delete",
+  },
+  Plans: {
+    View: "plans:view",
+    Create: "plans:create",
+    Update: "plans:update",
+    Delete: "plans:delete",
+  },
+  Organizations: {
+    View: "organizations:view",
+    Create: "organizations:create",
+    Update: "organizations:update",
+    Delete: "organizations:delete",
+  },
+  Auth: {
+    View: "auth:view",
+    Create: "auth:create",
+    Update: "auth:update",
+    Delete: "auth:delete",
+  },
+  WebsiteAudits: {
+    View: "website-audits:view",
+    Create: "website-audits:create",
+    Update: "website-audits:update",
+    Delete: "website-audits:delete",
+  },
+  Customers: {
+    View: "customers:view",
+    Create: "customers:create",
+    Update: "customers:update",
+    Delete: "customers:delete",
+  },
+  Branding: {
+    View: "branding:view",
+    Create: "branding:create",
+    Update: "branding:update",
+    Delete: "branding:delete",
+  },
+  Team: {
+    View: "team:view",
+    Create: "team:create",
+    Update: "team:update",
+    Delete: "team:delete",
+  },
   Reports: {
     View: "reports:view",
     Create: "reports:create",
     Update: "reports:update",
     Delete: "reports:delete",
   },
-
+  AdminReports: {
+    View: "admin-reports:view",
+    Create: "admin-reports:create",
+    Update: "admin-reports:update",
+    Delete: "admin-reports:delete",
+  },
+  
   Users: {
     View: "users:view",
     Create: "users:create",

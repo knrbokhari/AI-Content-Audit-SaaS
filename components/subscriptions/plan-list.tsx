@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -11,11 +12,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "../ui/card";
 import PlanFormModal from "./plan-form";
+import { LoadingSpinner } from "../ui/spinner";
+import { toast } from "sonner";
+import { getPlans } from "@/services/api";
 
 const PlanList = () => {
   const [isPlanData, setIsPlanData] = useState<any>(null);
-  // Sample data for plans
-  const [plans, setPlans] = useState([
+  const [plans, setPlans] = useState<any[]>([
     {
       id: 1,
       name: "Basic",
@@ -35,13 +38,39 @@ const PlanList = () => {
       active: false,
     },
   ]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPlans = async () => {
+    try {
+      setLoading(true);
+      const data = await getPlans();
+      setPlans(data?.data);
+    } catch (error: any) {
+      console.error("Error fetching plans:", error);
+      toast.error(error?.message || "Failed to fetch plans");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlans();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   const toggleActive = (id: number) => {
-    setPlans((prev) =>
-      prev.map((plan) =>
-        plan.id === id ? { ...plan, active: !plan.active } : plan,
-      ),
-    );
+    // setPlans((prev) =>
+    //   prev.map((plan) =>
+    //     plan.id === id ? { ...plan, active: !plan.active } : plan,
+    //   ),
+    // );
   };
 
   return (
