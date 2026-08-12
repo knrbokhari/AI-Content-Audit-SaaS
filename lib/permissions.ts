@@ -35,6 +35,12 @@ export const Permissions = {
     Update: "subscriptions:update",
     Delete: "subscriptions:delete",
   },
+  AdminSubscriptions: {
+    View: "admin-subscriptions:view",
+    Create: "admin-subscriptions:create",
+    Update: "admin-subscriptions:update",
+    Delete: "admin-subscriptions:delete",
+  },
   Settings: {
     View: "settings:view",
     Create: "settings:create",
@@ -95,7 +101,7 @@ export const Permissions = {
     Update: "admin-reports:update",
     Delete: "admin-reports:delete",
   },
-  
+
   Users: {
     View: "users:view",
     Create: "users:create",

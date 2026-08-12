@@ -84,6 +84,13 @@ const MENU = [
   {
     label: "Subscriptions",
     icon: CreditCard,
+    to: "/subscriptions-list",
+    permissions: [Permissions.AdminSubscriptions.View],
+    require: "all",
+  },
+  {
+    label: "Subscriptions",
+    icon: CreditCard,
     to: "/subscriptions",
     permissions: [Permissions.Subscriptions.View],
     require: "all",

@@ -8,7 +8,7 @@ const Page = () => {
     <div>
       <SiteHeader title="Subscription List"></SiteHeader>
       <div className="mt-8 space-y-8">
-        <SubscriptionsList />
+        <SubscriptionsList isAdmin={true} />
       </div>
     </div>
   );

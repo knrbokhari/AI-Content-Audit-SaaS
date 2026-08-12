@@ -116,6 +116,11 @@ export async function getSubscriptions(params?: any) {
   return res.data;
 }
 
+export async function getAdminSubscriptions(params?: any) {
+  const res = await http.get("/admin-subscriptions", { params });
+  return res.data;
+}
+
 export async function getSubscription(id: string | number) {
   const res = await http.get(`/subscriptions/${id}`);
   return res.data;
@@ -128,6 +133,25 @@ export async function getStripePublishableKey() {
 
 export async function cancelSubscription(id: string | number) {
   const res = await http.put(`/subscriptions/${id}/cancel`);
+  return res.data;
+}
+
+// ============================================
+// Organizations Endpoints
+// ============================================
+
+export async function getOrganizations(params?: any) {
+  const res = await http.get("/organizations", { params });
+  return res.data;
+}
+
+export async function getOrganization(id: string | number) {
+  const res = await http.get(`/organizations/${id}`);
+  return res.data;
+}
+
+export async function updateOrganization(id: string | number, payload: any) {
+  const res = await http.put(`/organizations/${id}`, payload);
   return res.data;
 }
 

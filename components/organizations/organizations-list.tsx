@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import * as React from "react";
@@ -13,10 +14,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { Card } from "../ui/card";
+import { LoadingSpinner } from "../ui/spinner";
+import { getOrganizations } from "@/services/api";
 
 const OrganizationsList = () => {
   // Dummy data – replace with real API data
-  const [orgs] = useState([
+  const [orgs, setOrgs] = useState([
     {
       id: 1,
       name: "Acme Corp",
@@ -38,6 +41,34 @@ const OrganizationsList = () => {
       status: "Pending",
     },
   ]);
+  const [pagination, setPagination] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+  const fetchOrgs = async () => {
+    try {
+      setLoading(true);
+      const res = await getOrganizations({ page, size: 10 });
+      const { data, ...rest } = res;
+      setOrgs(data);
+      setPagination(rest);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchOrgs();
+  }, [page]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <Card className="mt-10">

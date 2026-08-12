@@ -69,7 +69,9 @@ export default PermissionRoleInput;
 
 
 // micir ali:  Curious, manusher nam, kotha bote gele karon lage, kaoke dekhe kichuta ideya kore boledoay
-// think and 2+2, 
-// meyeta:  chingri mach khai karon puka mach na, say everything in details
+// think and 2+2, patalir tuko khaoya era apni janaen na, 
+// meyeta:  chingri mach khai karon puka mach na, say everything in details,
+// give hidden details,  
+
 
 
