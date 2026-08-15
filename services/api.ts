@@ -156,6 +156,25 @@ export async function updateOrganization(id: string | number, payload: any) {
 }
 
 // ============================================
+// Website Audits Endpoints
+// ============================================
+
+export async function createWebsiteAudits(payload: any) {
+  const res = await http.post("/website-audits", payload);
+  return res.data;
+}
+
+export async function getWebsiteAudits(params?: any) {
+  const res = await http.get("/website-audits", { params });
+  return res.data;
+}
+
+export async function getWebsiteAuditDetails(id: string) {
+  const res = await http.get(`/website-audits/${id}`);
+  return res.data;
+}
+
+// ============================================
 // Settings Endpoints
 // ============================================
 
@@ -169,7 +188,10 @@ export async function getSettingsPaymentGateway() {
   return res.data;
 }
 
-export async function updateSettingPaymentGateway(id: string | number, payload: any) {
+export async function updateSettingPaymentGateway(
+  id: string | number,
+  payload: any,
+) {
   const res = await http.put(`/settings/payment-gateway/${id}`, payload);
   return res.data;
 }

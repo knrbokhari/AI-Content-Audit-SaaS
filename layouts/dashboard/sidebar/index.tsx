@@ -193,14 +193,14 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
       {/* Nav */}
       <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
         {menu.map((item) => (
-          <Can permissions={item.permissions} require="any">
+          // <Can permissions={item.permissions} require="any">
             <MenuItem
               key={item.to}
               item={item}
               collapsed={collapsed}
               isActive={pathname === item.to}
             />
-          </Can>
+          // </Can>
         ))}
       </nav>
 

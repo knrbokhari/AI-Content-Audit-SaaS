@@ -1,47 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/rules-of-hooks */
+"use client";
+
 import { SiteHeader } from "@/components/ui/site-header";
+import { LoadingSpinner } from "@/components/ui/spinner";
 import { WebsiteAuditsDetails } from "@/components/website-audits/website-audits-details";
-import React from "react";
-
-const scores = {
-  overall: 85,
-  seo: 90,
-  contentQuality: 80,
-  readability: 75,
-  accessibility: 70,
-  performance: 95,
-};
-
-const stats = {
-  wordCount: 1200,
-  readingTime: "5 min",
-  images: 10,
-  imagesMissingAlt: 2,
-  internalLinks: 15,
-  externalLinks: 5,
-  brokenLinks: 1,
-  metaTitleLength: 60,
-  metaDescriptionLength: 150,
-  headings: 8,
-  primaryKeyword: "example",
-  keywordDensity: 1.5,
-};
-
-const improvement = {
-  previousContent: "This is the previous content of the website.",
-  improvedContent:
-    "This is the improved content of the website with better SEO and readability.",
-};
+import { getWebsiteAuditDetails } from "@/services/api";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const page = () => {
+  const params = useParams<{ slug: string }>();
+
+  const [data, setData]: any = useState({});
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPermission = async () => {
+      try {
+        const data = await getWebsiteAuditDetails(params.slug);
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPermission();
+  }, [params.slug]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div>
       <SiteHeader title="Website Audits Details"></SiteHeader>
       <div className="mt-5"></div>
-      <WebsiteAuditsDetails
-        improvement={improvement}
-        scores={scores}
-        stats={stats}
-      />
+      <WebsiteAuditsDetails data={data} />
     </div>
   );
 };

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Table,
   TableBody,
@@ -14,6 +16,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { LoadingSpinner } from "../ui/spinner";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { getWebsiteAudits } from "@/services/api";
+import { Button } from "../ui/button";
 
 interface Audit {
   organization: string;
@@ -48,6 +56,43 @@ const data: Audit[] = [
 ];
 
 export function WebsiteAuditsList() {
+  const [audits, setAudits] = useState<any[]>([]);
+  const [pagination, setPagination] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const router = useRouter();
+
+  const fetchWebsiteAudits = async () => {
+    try {
+      setLoading(true);
+      const res = await getWebsiteAudits({ page, size: 10 });
+      const { data, ...rest } = res;
+      setAudits(data);
+      setPagination(rest);
+    } catch (error) {
+      console.error("Error fetching Audits:", error);
+      toast.error("Failed to fetch Audits");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWebsiteAudits();
+  }, []);
+
+  const handleView = (id: number | string) => {
+    router.push(`/website-audits/${id}/details`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <Card>
       <CardContent>
@@ -56,30 +101,22 @@ export function WebsiteAuditsList() {
             <TableRow>
               <TableHead>Website</TableHead>
               <TableHead>Audit Score</TableHead>
-              <TableHead>issues</TableHead>
-              <TableHead>AI Score</TableHead>
+              <TableHead>Content Score</TableHead>
+              <TableHead>SEO Score</TableHead>
               <TableHead>Created Time</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((a, idx) => (
+            {audits?.map((a, idx) => (
               <TableRow key={idx}>
-                <TableCell>{a.website}</TableCell>
-                <TableCell>{a.auditScore}</TableCell>
-                <TableCell>{a.auditScore}</TableCell>
-                <TableCell>{a.aiScore}</TableCell>
-                <TableCell>{a.created}</TableCell>
+                <TableCell>{a.url}</TableCell>
+                <TableCell>{a.overallScore}</TableCell>
+                <TableCell>{a.contentScore}</TableCell>
+                <TableCell>{a.seoScore}</TableCell>
+                <TableCell>{a.createdAt}</TableCell>
                 <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>View Report</DropdownMenuItem>
-                      <DropdownMenuItem>Re‑audit</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button onClick={() => handleView(a.id)}>View Report</Button>
                 </TableCell>
               </TableRow>
             ))}
