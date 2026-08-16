@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import { getRecentAudit } from "@/services/api";
+import { getRecentInvoice } from "@/services/api";
 import { Button } from "../ui/button";
 import formatDate from "@/utils/formatDate";
 
@@ -20,14 +20,14 @@ interface Audit {
   createdAt: string;
 }
 
-export function RecentWebsiteAuditsTable() {
+export function RecentInvoiceTable() {
   const [result, setData] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await getRecentAudit();
+      const res = await getRecentInvoice();
       setData(res);
     } catch (error) {
     } finally {
@@ -43,10 +43,10 @@ export function RecentWebsiteAuditsTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Website</TableHead>
-          <TableHead>Audit Score</TableHead>
-          <TableHead>AI Score</TableHead>
-          <TableHead>created By</TableHead>
+          <TableHead>Invoice ID</TableHead>
+          <TableHead>Plan</TableHead>
+          <TableHead>Amount</TableHead>
+          <TableHead>Audits</TableHead>
           <TableHead>Created Time</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
@@ -60,7 +60,7 @@ export function RecentWebsiteAuditsTable() {
             <TableCell>{a.createdBy.name}</TableCell>
             <TableCell>{formatDate(a.createdAt)}</TableCell>
             <TableCell>
-              <Button>View Report</Button>
+              <Button>View</Button>
             </TableCell>
           </TableRow>
         ))}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import {
   Table,
   TableBody,
@@ -6,44 +7,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getRecentUserRegistrations } from "@/services/api";
+import formatDate from "@/utils/formatDate";
+import { useEffect, useState } from "react";
 
-interface Payment {
-  organization: string;
-  invoiceId: string;
-  amount: number;
-  method: string;
-  date: string;
-  status: "paid" | "pending" | "failed";
+interface User {
+  name: string;
+  email: string;
+  phone: string;
+  organization: {
+    name: string;
+  };
+  role: {
+    name: string;
+  };
+  plan_type: string;
+  created_at: string;
 }
 
-const data: Payment[] = [
-  {
-    organization: "Acme Corp",
-    invoiceId: "INV-001",
-    amount: 1200,
-    method: "Credit Card",
-    date: "2024-03-01",
-    status: "paid",
-  },
-  {
-    organization: "Beta Ltd",
-    invoiceId: "INV-002",
-    amount: 300,
-    method: "Bank Transfer",
-    date: "2024-03-05",
-    status: "pending",
-  },
-  {
-    organization: "Gamma Inc",
-    invoiceId: "INV-003",
-    amount: 4500,
-    method: "PayPal",
-    date: "2024-02-28",
-    status: "failed",
-  },
-];
-
 export function LatestUserRegistrationsTable() {
+  const [result, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await getRecentUserRegistrations();
+      setData(res);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <Table>
       <TableHeader>
@@ -52,19 +51,19 @@ export function LatestUserRegistrationsTable() {
           <TableHead>Email</TableHead>
           <TableHead>Organization</TableHead>
           <TableHead>Role</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead>Plan</TableHead>
           <TableHead>Joined Date</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((p, idx) => (
+        {result.map((p: User, idx) => (
           <TableRow key={idx}>
-            <TableCell>{p.organization}</TableCell>
-            <TableCell>{p.invoiceId}</TableCell>
-            <TableCell>${p.amount}</TableCell>
-            <TableCell>{p.method}</TableCell>
-            <TableCell>{p.method}</TableCell>
-            <TableCell>{p.date}</TableCell>
+            <TableCell>{p.name}</TableCell>
+            <TableCell>{p.email}</TableCell>
+            <TableCell>{p.organization?.name}</TableCell>
+            <TableCell>{p.role.name}</TableCell>
+            <TableCell>{p.plan_type || "-"}</TableCell>
+            <TableCell>{formatDate(p.created_at)}</TableCell>
           </TableRow>
         ))}
       </TableBody>

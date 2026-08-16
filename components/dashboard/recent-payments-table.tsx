@@ -1,7 +1,22 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+/* eslint-disable react-hooks/set-state-in-effect */
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { useEffect, useState } from "react";
+import { getRecentPayments } from "@/services/api";
 
 interface Payment {
   organization: string;
@@ -13,12 +28,51 @@ interface Payment {
 }
 
 const data: Payment[] = [
-  { organization: "Acme Corp", invoiceId: "INV-001", amount: 1200, method: "Credit Card", date: "2024-03-01", status: "paid" },
-  { organization: "Beta Ltd", invoiceId: "INV-002", amount: 300, method: "Bank Transfer", date: "2024-03-05", status: "pending" },
-  { organization: "Gamma Inc", invoiceId: "INV-003", amount: 4500, method: "PayPal", date: "2024-02-28", status: "failed" },
+  {
+    organization: "Acme Corp",
+    invoiceId: "INV-001",
+    amount: 1200,
+    method: "Credit Card",
+    date: "2024-03-01",
+    status: "paid",
+  },
+  {
+    organization: "Beta Ltd",
+    invoiceId: "INV-002",
+    amount: 300,
+    method: "Bank Transfer",
+    date: "2024-03-05",
+    status: "pending",
+  },
+  {
+    organization: "Gamma Inc",
+    invoiceId: "INV-003",
+    amount: 4500,
+    method: "PayPal",
+    date: "2024-02-28",
+    status: "failed",
+  },
 ];
 
 export function RecentPaymentsTable() {
+  const [result, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await getRecentPayments();
+      setData(res);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Table>
       <TableHeader>
@@ -29,7 +83,7 @@ export function RecentPaymentsTable() {
           <TableHead>Payment Method</TableHead>
           <TableHead>Date</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Actions</TableHead>
+          {/* <TableHead>Actions</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -41,11 +95,19 @@ export function RecentPaymentsTable() {
             <TableCell>{p.method}</TableCell>
             <TableCell>{p.date}</TableCell>
             <TableCell>
-              <Badge variant={p.status === "paid" ? "success" : p.status === "pending" ? "warning" : "destructive"}>
+              <Badge
+                variant={
+                  p.status === "paid"
+                    ? "secondary"
+                    : p.status === "pending"
+                      ? "outline"
+                      : "destructive"
+                }
+              >
                 {p.status}
               </Badge>
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <MoreHorizontal className="h-4 w-4" />
@@ -55,7 +117,7 @@ export function RecentPaymentsTable() {
                   <DropdownMenuItem>Retry</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         ))}
       </TableBody>

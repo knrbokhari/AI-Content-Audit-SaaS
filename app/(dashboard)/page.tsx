@@ -2,14 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/ui/site-header";
-import { KPICard } from "@/components/ui/kpi-card";
-import { Users, DollarSign, TrendingUp } from "lucide-react";
 import { RecentOrganizationsTable } from "@/components/dashboard/recent-organizations-table";
 import { RecentPaymentsTable } from "@/components/dashboard/recent-payments-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RecentWebsiteAuditsTable } from "@/components/dashboard/recent-website-audits-table";
 import { LatestUserRegistrationsTable } from "@/components/dashboard/latest-user-registration-table";
 import { useRouter } from "next/navigation";
+import { RecentInvoiceTable } from "@/components/dashboard/recent-invoice-table";
+import AdminDashboardCard from "@/components/dashboard/admin-dashboard-card";
+import DashboardCard from "@/components/dashboard/dashboard-card";
 
 export default function Home() {
   const router = useRouter();
@@ -24,36 +25,8 @@ export default function Home() {
           Create Audit
         </Button>
       </SiteHeader>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard
-          title="Total Users"
-          value={1200}
-          percentage={12}
-          icon={Users}
-          color={undefined}
-        />
-        <KPICard
-          title="Revenue"
-          value="$45k"
-          percentage={8}
-          icon={DollarSign}
-          color={undefined}
-        />
-        <KPICard
-          title="Growth"
-          value="+3.5%"
-          percentage={3.5}
-          icon={TrendingUp}
-          color={undefined}
-        />
-        <KPICard
-          title="Growth"
-          value="+3.5%"
-          percentage={3.5}
-          icon={TrendingUp}
-          color={undefined}
-        />
-      </div>
+      <AdminDashboardCard />
+      <DashboardCard />
       <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader>
@@ -85,6 +58,14 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <LatestUserRegistrationsTable />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Latest Invoice</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RecentInvoiceTable />
           </CardContent>
         </Card>
       </div>

@@ -156,6 +156,45 @@ export async function updateOrganization(id: string | number, payload: any) {
 }
 
 // ============================================
+// Dashboard Endpoints
+// ============================================
+
+export async function getDashboardReport() {
+  const res = await http.get(`/dashboard/report`);
+  return res.data;
+}
+
+export async function getRecentAudit() {
+  const res = await http.get(`/dashboard/recent-audit`);
+  return res.data;
+}
+
+export async function getRecentInvoice() {
+  const res = await http.get(`/dashboard/recent-invoice`);
+  return res.data;
+}
+
+export async function getRecentOrganizations() {
+  const res = await http.get(`/admin-dashboard/recent-organizations`);
+  return res.data;
+}
+
+export async function getRecentPayments() {
+  const res = await http.get(`/admin-dashboard/recent-payments`);
+  return res.data;
+}
+
+export async function getRecentUserRegistrations() {
+  const res = await http.get(`/admin-dashboard/recent-user-registrations`);
+  return res.data;
+}
+
+export async function getAdminDashboardReport() {
+  const res = await http.get(`/admin-dashboard/dashboard-report`);
+  return res.data;
+}
+
+// ============================================
 // Website Audits Endpoints
 // ============================================
 
