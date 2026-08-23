@@ -178,7 +178,7 @@ const Navbar = ({ onMenuToggle }: any) => {
                 </p>
               </div>
               <div className="p-1.5 space-y-0.5">
-                <button
+                {/* <button
                   onClick={() => {
                     navigate.push("/profile");
                     setShowUser(false);
@@ -197,14 +197,14 @@ const Navbar = ({ onMenuToggle }: any) => {
                 >
                   <Settings size={13} />
                   Preferences
-                </button>
-                <div
+                </button> */}
+                {/* <div
                   style={{
                     height: 1,
                     background: "var(--border)",
                     margin: "4px 0",
                   }}
-                />
+                /> */}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-500 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 transition-colors"

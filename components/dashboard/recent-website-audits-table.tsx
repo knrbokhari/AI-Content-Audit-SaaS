@@ -11,8 +11,10 @@ import { useEffect, useState } from "react";
 import { getRecentAudit } from "@/services/api";
 import { Button } from "../ui/button";
 import formatDate from "@/utils/formatDate";
+import Link from "next/link";
 
 interface Audit {
+  id: number;
   createdBy: { name: string };
   url: string;
   overallScore: number;
@@ -60,7 +62,11 @@ export function RecentWebsiteAuditsTable() {
             <TableCell>{a.createdBy.name}</TableCell>
             <TableCell>{formatDate(a.createdAt)}</TableCell>
             <TableCell>
-              <Button>View Report</Button>
+              <Button>
+                <Link href={`/website-audits/${a?.id}/details`}>
+                  View Report
+                </Link>
+              </Button>
             </TableCell>
           </TableRow>
         ))}

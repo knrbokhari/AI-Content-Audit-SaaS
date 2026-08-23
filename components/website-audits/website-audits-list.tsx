@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getWebsiteAudits } from "@/services/api";
 import { Button } from "../ui/button";
+import formatDate from "@/utils/formatDate";
 
 interface Audit {
   organization: string;
@@ -114,7 +115,7 @@ export function WebsiteAuditsList() {
                 <TableCell>{a.overallScore}</TableCell>
                 <TableCell>{a.contentScore}</TableCell>
                 <TableCell>{a.seoScore}</TableCell>
-                <TableCell>{a.createdAt}</TableCell>
+                <TableCell>{formatDate(a.createdAt)}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleView(a.id)}>View Report</Button>
                 </TableCell>

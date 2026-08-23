@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 import {
   Table,
@@ -17,6 +18,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { useEffect, useState } from "react";
 import { getRecentPayments } from "@/services/api";
+import formatDate from "@/utils/formatDate";
 
 interface Payment {
   organization: string;
@@ -77,7 +79,7 @@ export function RecentPaymentsTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Organization</TableHead>
+          <TableHead>Plan Name</TableHead>
           <TableHead>Invoice ID</TableHead>
           <TableHead>Amount</TableHead>
           <TableHead>Payment Method</TableHead>
@@ -87,13 +89,15 @@ export function RecentPaymentsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((p, idx) => (
+        {result.map((p: any, idx) => (
           <TableRow key={idx}>
-            <TableCell>{p.organization}</TableCell>
-            <TableCell>{p.invoiceId}</TableCell>
-            <TableCell>${p.amount}</TableCell>
-            <TableCell>{p.method}</TableCell>
-            <TableCell>{p.date}</TableCell>
+            <TableCell>{p.planName}</TableCell>
+            <TableCell>{p.stripeCustomerId}</TableCell>
+            <TableCell>
+              ${p.amount}/{p.interval}
+            </TableCell>
+            <TableCell>Credit Card</TableCell>
+            <TableCell>{formatDate(p.createdAt)}</TableCell>
             <TableCell>
               <Badge
                 variant={

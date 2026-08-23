@@ -76,7 +76,7 @@ const WebsiteAuditsForm = () => {
         </div>
       </form>
 
-      <WebsiteAuditsDetails data={data} />
+      {!!data?.id && <WebsiteAuditsDetails data={data} />}
     </div>
   );
 };

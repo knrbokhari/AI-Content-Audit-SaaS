@@ -90,7 +90,7 @@ const RoleConfig = ({ open, onClose, isEdit = false }: RoleConfigProps) => {
   }, [open]);
 
   const [showKeys, setShowKeys] = useState({
-    publishable: true,
+    publishable: false,
     secret: false,
     webhook: false,
   });
@@ -216,7 +216,7 @@ const RoleConfig = ({ open, onClose, isEdit = false }: RoleConfigProps) => {
                   {...register("stripePublishableKey")}
                   id="stripePublishableKey"
                   type={showKeys.publishable ? "text" : "password"}
-                  className="plex-input text-sm w-full pr-10"
+                  className=" text-sm w-full pr-10"
                   placeholder="pk_test_..."
                   label="Publishable Key"
                   error={errors.stripePublishableKey?.message}
@@ -249,7 +249,7 @@ const RoleConfig = ({ open, onClose, isEdit = false }: RoleConfigProps) => {
                   {...register("stripeSecretKey")}
                   id="stripeSecretKey"
                   type={showKeys.secret ? "text" : "password"}
-                  className="plex-input text-sm w-full pr-10"
+                  className=" text-sm w-full pr-10"
                   placeholder="sk_test_..."
                   label="Secret Key"
                   error={errors.stripeSecretKey?.message}
@@ -276,7 +276,7 @@ const RoleConfig = ({ open, onClose, isEdit = false }: RoleConfigProps) => {
                   {...register("stripeWebhookSecret")}
                   id="stripeWebhookSecret"
                   type={showKeys.webhook ? "text" : "password"}
-                  className="plex-input text-sm w-full pr-10"
+                  className=" text-sm w-full pr-10"
                   placeholder="whsec_..."
                   label="Webhook Secret"
                   error={errors.stripeWebhookSecret?.message}
@@ -304,7 +304,7 @@ const RoleConfig = ({ open, onClose, isEdit = false }: RoleConfigProps) => {
                 {...register("paymentSuccessUrl")}
                 id="paymentSuccessUrl"
                 type="url"
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="https://example.com/payment-success"
                 label="Payment Success URL"
                 error={errors.paymentSuccessUrl?.message}
@@ -318,7 +318,7 @@ const RoleConfig = ({ open, onClose, isEdit = false }: RoleConfigProps) => {
                 {...register("paymentCancelUrl")}
                 id="paymentCancelUrl"
                 type="url"
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="https://example.com/payment-cancel"
                 label="Payment Cancel URL"
                 error={errors.paymentCancelUrl?.message}

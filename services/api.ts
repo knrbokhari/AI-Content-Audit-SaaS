@@ -156,6 +156,25 @@ export async function updateOrganization(id: string | number, payload: any) {
 }
 
 // ============================================
+// Branding Endpoints
+// ============================================
+
+export async function getBranding() {
+  const res = await http.get("/branding/me");
+  return res.data;
+}
+
+export async function creteBranding(payload: any) {
+  const res = await http.post(`/branding`, payload);
+  return res.data;
+}
+
+export async function updateBranding(id: string | number, payload: any) {
+  const res = await http.patch(`/branding/${id}`, payload);
+  return res.data;
+}
+
+// ============================================
 // Dashboard Endpoints
 // ============================================
 

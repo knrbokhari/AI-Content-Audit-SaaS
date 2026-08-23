@@ -16,6 +16,8 @@ import {
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { createPlan, updatePlan } from "@/services/api";
+import { Label } from "../ui/label";
 
 const INTERVALS = [
   { value: "month", label: "Monthly" },
@@ -94,21 +96,21 @@ const PlanFormModal = ({
       .filter(Boolean);
 
     if (isEdit) {
-      // await apiUpdatePlan(existing.id, {
-      //   name: data.name,
-      //   description: data.description,
-      //   features,
-      // });
+      await updatePlan(existing.productId, {
+        name: data.name,
+        description: data.description,
+        features,
+      });
 
       toast.success("Plan updated.");
     } else {
-      // await apiCreatePlan({
-      //   ...data,
-      //   amount: Number(data.amount),
-      //   intervalCount: Number(data.intervalCount),
-      //   trialDays: Number(data.trialDays),
-      //   features,
-      // });
+      await createPlan({
+        ...data,
+        amount: Number(data.amount),
+        intervalCount: Number(data.intervalCount),
+        trialDays: Number(data.trialDays),
+        features,
+      });
 
       toast.success("Plan created.");
     }
@@ -133,7 +135,7 @@ const PlanFormModal = ({
             <div className="col-span-2">
               <Input
                 {...register("name")}
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="Professional"
                 label="Plan Name"
                 error={errors.name?.message}
@@ -144,7 +146,7 @@ const PlanFormModal = ({
             <div className="col-span-2">
               <Input
                 {...register("description")}
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="Short description"
                 label="Description"
                 error={errors.description?.message}
@@ -158,7 +160,7 @@ const PlanFormModal = ({
                 min="0"
                 step="0.01"
                 disabled={isEdit}
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="99.00"
                 label="Price"
                 error={errors.amount?.message}
@@ -166,10 +168,11 @@ const PlanFormModal = ({
             </div>
 
             <div>
+              <Label htmlFor="interval" className="mb-1.5">Interval</Label>
               <select
                 {...register("interval")}
                 disabled={isEdit}
-                className="plex-input text-sm w-full"
+                className="w-full px-3 py-1.5 rounded-lg border text-sm transition-all duration-150 outline-none mt-1 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50"
               >
                 {INTERVALS.map((item) => (
                   <option key={item.value} value={item.value}>
@@ -185,7 +188,7 @@ const PlanFormModal = ({
                 type="number"
                 min="1"
                 disabled={isEdit}
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="1"
                 label="Billing Interval Count"
                 error={errors.intervalCount?.message}
@@ -198,7 +201,7 @@ const PlanFormModal = ({
                 type="number"
                 min="0"
                 disabled={isEdit}
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="0"
                 label="Trial Days"
                 error={errors.trialDays?.message}
@@ -209,7 +212,7 @@ const PlanFormModal = ({
               <Input
                 {...register("currency")}
                 disabled={isEdit}
-                className="plex-input text-sm w-full"
+                className=" text-sm w-full"
                 placeholder="usd"
                 label="Currency"
                 error={errors.currency?.message}
@@ -220,7 +223,7 @@ const PlanFormModal = ({
           <textarea
             {...register("features")}
             rows={4}
-            className="plex-input text-sm resize-none w-full"
+            className=" text-sm resize-none w-full"
             placeholder="Unlimited campaigns, Email support, 500 targets"
           />
 
@@ -257,6 +260,5 @@ const PlanFormModal = ({
     </Dialog>
   );
 };
-
 
 export default PlanFormModal;

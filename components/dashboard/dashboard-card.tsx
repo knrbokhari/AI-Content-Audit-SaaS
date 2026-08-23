@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useState } from "react";
 import { KPICard } from "../ui/kpi-card";
-import { Users, DollarSign, TrendingUp } from "lucide-react";
+import { Users, DollarSign, TrendingUp, ReceiptText, ChartColumn } from "lucide-react";
 import { getDashboardReport } from "@/services/api";
 
 interface Data {
@@ -35,28 +35,28 @@ const DashboardCard = () => {
       <KPICard
         title="Total Users"
         value={result?.total_user || 0}
-        percentage={12}
+        percentage={0}
         icon={Users}
         color={undefined}
       />
       <KPICard
         title="Total Audits"
         value={result?.total_audit || 0}
-        percentage={3.5}
-        icon={TrendingUp}
+        percentage={0}
+        icon={ReceiptText}
         color={undefined}
       />
       <KPICard
         title="Total Audit Score"
         value={result?.total_audit_score || 0}
         percentage={0}
-        icon={DollarSign}
+        icon={ChartColumn}
         color={undefined}
       />
       <KPICard
         title="Avg Audit Score"
         value={result?.avg_audit_score || 0}
-        percentage={3.5}
+        percentage={0}
         icon={TrendingUp}
         color={undefined}
       />

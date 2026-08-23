@@ -11,13 +11,14 @@ import { useEffect, useState } from "react";
 import { getRecentInvoice } from "@/services/api";
 import { Button } from "../ui/button";
 import formatDate from "@/utils/formatDate";
+import Link from "next/link";
 
 interface Audit {
-  createdBy: { name: string };
-  url: string;
-  overallScore: number;
-  seoScore: number;
-  createdAt: string;
+  stripeInvoiceId: string;
+  amount: string;
+  date: string;
+  status: string;
+  hostedInvoiceUrl: string;
 }
 
 export function RecentInvoiceTable() {
@@ -44,9 +45,8 @@ export function RecentInvoiceTable() {
       <TableHeader>
         <TableRow>
           <TableHead>Invoice ID</TableHead>
-          <TableHead>Plan</TableHead>
           <TableHead>Amount</TableHead>
-          <TableHead>Audits</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead>Created Time</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
@@ -54,13 +54,16 @@ export function RecentInvoiceTable() {
       <TableBody>
         {result.map((a, idx) => (
           <TableRow key={idx}>
-            <TableCell>{a.url}</TableCell>
-            <TableCell>{a.overallScore}</TableCell>
-            <TableCell>{a.seoScore}</TableCell>
-            <TableCell>{a.createdBy.name}</TableCell>
-            <TableCell>{formatDate(a.createdAt)}</TableCell>
+            <TableCell>{a.stripeInvoiceId}</TableCell>
+            <TableCell>{a.amount}</TableCell>
+            <TableCell>{a.status}</TableCell>
+            <TableCell>{formatDate(a.date)}</TableCell>
             <TableCell>
-              <Button>View</Button>
+              <Button>
+                <Link href={a?.hostedInvoiceUrl} target="_blank">
+                  View
+                </Link>{" "}
+              </Button>
             </TableCell>
           </TableRow>
         ))}

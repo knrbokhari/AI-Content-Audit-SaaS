@@ -12,7 +12,7 @@ function Input({
   ...props
 }: React.ComponentProps<"input"> & { label?: string, error?: string, required?: boolean }) {
   return (
-    <div>
+    <>
       {label && <Label className="mb-3">{label}{required && <span className="text-red-500">*</span>}</Label>}
       <input
         type={type}
@@ -24,7 +24,7 @@ function Input({
         {...props}
       />
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-    </div>
+    </>
   );
 }
 

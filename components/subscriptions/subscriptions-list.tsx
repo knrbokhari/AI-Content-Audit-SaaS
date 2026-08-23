@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ import { KPICard } from "../ui/kpi-card";
 import { AlertTriangle, CreditCard, Package, Zap } from "lucide-react";
 import { getAdminSubscriptions, getSubscriptions } from "@/services/api";
 import { LoadingSpinner } from "../ui/spinner";
+import formatDate from "@/utils/formatDate";
 
 type TotalStats = {
   total_subscription?: number;
@@ -127,21 +129,21 @@ const SubscriptionsList = ({ isAdmin = false }: { isAdmin?: boolean }) => {
               <TableHead>End Date</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Payment Method</TableHead>
-              <TableHead>Details</TableHead>
+              {/* <TableHead>Details</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {subscriptions.map((sub) => (
-              <TableRow key={sub.subscriptionId}>
-                <TableCell>{sub.customer}</TableCell>
-                <TableCell>{sub.subscriptionId}</TableCell>
+            {subscriptions.map((sub: any) => (
+              <TableRow key={sub.stripeSubscriptionId}>
+                <TableCell>{sub.stripeCustomerId}</TableCell>
+                <TableCell>{sub.stripeSubscriptionId}</TableCell>
                 <TableCell>{sub.planName}</TableCell>
                 <TableCell>{sub.status}</TableCell>
-                <TableCell>{sub.startDate}</TableCell>
-                <TableCell>{sub.endDate}</TableCell>
-                <TableCell>{sub.amount}</TableCell>
-                <TableCell>{sub.paymentMethod}</TableCell>
-                <TableCell>{sub.details}</TableCell>
+                <TableCell>{formatDate(sub.currentPeriodStart)}</TableCell>
+                <TableCell>{formatDate(sub.currentPeriodEnd)}</TableCell>
+                <TableCell>${sub.amount}</TableCell>
+                <TableCell>Credit Card</TableCell>
+                {/* <TableCell>{sub.details}</TableCell> */}
               </TableRow>
             ))}
           </TableBody>

@@ -18,33 +18,14 @@ import { getPlans } from "@/services/api";
 
 const PlanList = () => {
   const [isPlanData, setIsPlanData] = useState<any>(null);
-  const [plans, setPlans] = useState<any[]>([
-    {
-      id: 1,
-      name: "Basic",
-      price: "$9.99/month",
-      trial: "14 days",
-      subscribers: 1200,
-      features: ["Feature A", "Feature B"],
-      active: true,
-    },
-    {
-      id: 2,
-      name: "Pro",
-      price: "$29.99/month",
-      trial: "30 days",
-      subscribers: 450,
-      features: ["Feature A", "Feature B", "Feature C"],
-      active: false,
-    },
-  ]);
+  const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchPlans = async () => {
     try {
       setLoading(true);
       const data = await getPlans();
-      setPlans(data?.data);
+      setPlans(data);
     } catch (error: any) {
       console.error("Error fetching plans:", error);
       toast.error(error?.message || "Failed to fetch plans");
@@ -91,17 +72,19 @@ const PlanList = () => {
             {plans.map((plan) => (
               <TableRow key={plan.id}>
                 <TableCell>{plan.name}</TableCell>
-                <TableCell>{plan.price}</TableCell>
-                <TableCell>{plan.trial}</TableCell>
-                <TableCell>{plan.subscribers}</TableCell>
+                <TableCell>
+                  ${plan.price}/{plan.interval}
+                </TableCell>
+                <TableCell>{plan.trialDays}</TableCell>
+                <TableCell>{plan.subscriberCount}</TableCell>
                 <TableCell>{plan.features.join(", ")}</TableCell>
                 <TableCell className="flex gap-2">
-                  <Button
-                    variant={plan.active ? "destructive" : "outline"}
+                  {/* <Button
+                    variant={plan.productActive ? "destructive" : "outline"}
                     onClick={() => toggleActive(plan.id)}
                   >
-                    {plan.active ? "Deactivate" : "Activate"}
-                  </Button>
+                    {plan.productActive ? "Deactivate" : "Activate"}
+                  </Button> */}
                   <Button variant="outline" onClick={() => setIsPlanData(plan)}>
                     Edit
                   </Button>

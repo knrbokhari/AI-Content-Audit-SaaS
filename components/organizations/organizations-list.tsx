@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
@@ -19,28 +20,7 @@ import { getOrganizations } from "@/services/api";
 
 const OrganizationsList = () => {
   // Dummy data – replace with real API data
-  const [orgs, setOrgs] = useState([
-    {
-      id: 1,
-      name: "Acme Corp",
-      members: 12,
-      avgScore: 4.5,
-      package: "Pro",
-      audits: 3,
-      subscriptionEnd: "2026-12-31",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Beta Ltd",
-      members: 8,
-      avgScore: 3.8,
-      package: "Basic",
-      audits: 1,
-      subscriptionEnd: "2026-09-15",
-      status: "Pending",
-    },
-  ]);
+  const [orgs, setOrgs] = useState([]);
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -75,33 +55,39 @@ const OrganizationsList = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Organization</TableHead>
+            <TableHead>Organization Name</TableHead>
+            <TableHead>Plan</TableHead>
+            <TableHead>Domain</TableHead>
             <TableHead>Members</TableHead>
-            <TableHead>Average Score</TableHead>
-            <TableHead>Package</TableHead>
-            <TableHead>Audits</TableHead>
-            <TableHead>Subscription End</TableHead>
+            <TableHead>Total Audit</TableHead>
+            <TableHead>Website</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
+            {/* <TableHead>Actions</TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orgs.map((org) => (
+          {orgs.map((org: any) => (
             <TableRow key={org.id}>
               <TableCell>{org.name}</TableCell>
-              <TableCell>{org.members}</TableCell>
-              <TableCell>{org.avgScore}</TableCell>
-              <TableCell>{org.package}</TableCell>
-              <TableCell>{org.audits}</TableCell>
-              <TableCell>{org.subscriptionEnd}</TableCell>
+              <TableCell>{org.subscriptions?.[0]?.planName || "-"}</TableCell>
+              <TableCell>{org.domain}</TableCell>
+              <TableCell>{org._count.users}</TableCell>
+              <TableCell>{org._count.audits}</TableCell>
+              <TableCell>{org.branding?.website || "NA"}</TableCell>
               <TableCell>
                 <Badge
-                  variant={org.status === "Active" ? "default" : "destructive"}
+                  variant={
+                    org.subscriptions?.planName === "active"
+                      ? "default"
+                      : org.status === "pending"
+                        ? "secondary"
+                        : "destructive"
+                  }
                 >
-                  {org.status}
+                  {org.subscriptions?.planName || "Free"}
                 </Badge>
               </TableCell>
-              <TableCell className="flex gap-2">
+              {/* <TableCell className="flex gap-2">
                 <Button size="sm" variant="outline">
                   View
                 </Button>
@@ -111,7 +97,7 @@ const OrganizationsList = () => {
                 <Button size="sm" variant="outline" color="green">
                   Send Payment Email
                 </Button>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

@@ -15,13 +15,12 @@ export default function SubscriptionGuard({
   const router = useRouter();
   const [user, setUser] = useAtom(userAtom);
 
-  useEffect(() => {
-    if (!user) return;
+  if (!user) return;
 
-    if (!user.plan_type) {
-      // router.replace("/plan");
-    }
-  }, [user, router]);
+  if (!user.plan_type && !user?.role?.isSystem) {
+    router.replace("/chose-plan");
+  }
+  console.log(!user.plan_type && !user?.role?.isSystem);
 
   if (!user) {
     return null;

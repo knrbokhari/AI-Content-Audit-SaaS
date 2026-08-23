@@ -41,6 +41,7 @@ export default function RootLayout({
     if (secondary) document.documentElement.style.setProperty("--brand-secondary", secondary);
     if (primaryDark) document.documentElement.style.setProperty("--brand-primary-dark", primaryDark);
     if (secondaryDark) document.documentElement.style.setProperty("--brand-secondary-dark", secondaryDark);
+    console.log(branding)
   }, [branding?.primaryColor, branding?.secondaryColor, branding?.primaryColorDark, branding?.secondaryColorDark]);
 
 

@@ -96,7 +96,7 @@ export function RecentOrganizationsTable() {
         {result.map((org: any, idx) => (
           <TableRow key={idx}>
             <TableCell>{org.name}</TableCell>
-            <TableCell>{org.subscriptions?.planName || "-"}</TableCell>
+            <TableCell>{org.subscriptions?.[0]?.planName || "-"}</TableCell>
             <TableCell>{org.domain}</TableCell>
             <TableCell>{org._count.users}</TableCell>
             <TableCell>{org._count.audits}</TableCell>
@@ -104,14 +104,14 @@ export function RecentOrganizationsTable() {
             <TableCell>
               <Badge
                 variant={
-                  org.subscriptions?.planName === "active"
+                  org.subscriptions?.[0]?.status === "active"
                     ? "default"
                     : org.status === "pending"
                       ? "secondary"
                       : "destructive"
                 }
               >
-                {org.subscriptions?.planName || "Free"}
+                {org.subscriptions?.[0]?.status || "Free"}
               </Badge>
             </TableCell>
             {/* <TableCell>
