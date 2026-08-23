@@ -1,0 +1,13 @@
+services:
+  nextjs-client:
+    build:
+      context: .
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512m

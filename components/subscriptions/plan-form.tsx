@@ -67,7 +67,7 @@ const PlanFormModal = ({
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues,
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
   });
 
   useEffect(() => {
