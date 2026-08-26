@@ -1,8 +1,11 @@
-import * as React from "react"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MoreHorizontalIcon,
+} from "lucide-react";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -13,7 +16,7 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}
     />
-  )
+  );
 }
 
 function PaginationContent({
@@ -23,20 +26,20 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-0.5", className)}
+      className={cn("flex items-center gap-1", className)}
       {...props}
     />
-  )
+  );
 }
 
 function PaginationItem({ ...props }: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" {...props} />
+  return <li data-slot="pagination-item" {...props} />;
 }
 
 type PaginationLinkProps = {
-  isActive?: boolean
+  isActive?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">
+  React.ComponentProps<"a">;
 
 function PaginationLink({
   className,
@@ -47,9 +50,16 @@ function PaginationLink({
   return (
     <Button
       asChild
-      variant={isActive ? "outline" : "ghost"}
+      variant="ghost"
       size={size}
-      className={cn(className)}
+      className={cn(
+        "rounded-lg transition-colors duration-150",
+        "hover:bg-accent hover:text-accent-foreground",
+        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        isActive &&
+          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm",
+        className,
+      )}
     >
       <a
         aria-current={isActive ? "page" : undefined}
@@ -58,7 +68,7 @@ function PaginationLink({
         {...props}
       />
     </Button>
-  )
+  );
 }
 
 function PaginationPrevious({
@@ -70,13 +80,16 @@ function PaginationPrevious({
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("pl-1.5!", className)}
+      className={cn(
+        "gap-1 pl-2.5! pr-3! text-muted-foreground hover:text-foreground",
+        className,
+      )}
       {...props}
     >
-      <ChevronLeftIcon data-icon="inline-start" />
+      <ChevronLeftIcon data-icon="inline-start" className="size-4" />
       <span className="hidden sm:block">{text}</span>
     </PaginationLink>
-  )
+  );
 }
 
 function PaginationNext({
@@ -88,13 +101,16 @@ function PaginationNext({
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("pr-1.5!", className)}
+      className={cn(
+        "gap-1 pl-3! pr-2.5! text-muted-foreground hover:text-foreground",
+        className,
+      )}
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
-      <ChevronRightIcon data-icon="inline-end" />
+      <ChevronRightIcon data-icon="inline-end" className="size-4" />
     </PaginationLink>
-  )
+  );
 }
 
 function PaginationEllipsis({
@@ -106,16 +122,15 @@ function PaginationEllipsis({
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
-        "flex size-8 items-center justify-center [&_svg:not([class*='size-'])]:size-4",
-        className
+        "flex size-9 items-center justify-center text-muted-foreground [&_svg:not([class*='size-'])]:size-4",
+        className,
       )}
       {...props}
     >
-      <MoreHorizontalIcon
-      />
+      <MoreHorizontalIcon />
       <span className="sr-only">More pages</span>
     </span>
-  )
+  );
 }
 
 export {
@@ -126,4 +141,4 @@ export {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-}
+};

@@ -49,15 +49,15 @@
 }
 
 :root {
-  --background: #F1F3F6;
+  --background: #f1f3f6;
   --foreground: #0a0a0a;
   --card: #ffffff;
   --card-foreground: #0a0a0a;
   --popover: #ffffff;
   --popover-foreground: #0a0a0a;
-  --brand-primary: #4D8EF7;
+  --brand-primary: #3e6fe0;
   --brand-secondary: #000000;
-  --brand-primary-dark: #6BA3F9;
+  --brand-primary-dark: #6c9bf5;
   --brand-secondary-dark: #151922;
   --primary: var(--brand-primary);
   --primary-foreground: #fafafa;
@@ -69,7 +69,7 @@
   --accent-foreground: #171717;
   --destructive: #e7000b;
   --success: #16a34a;
-  --border: #E2E6ED;
+  --border: #e2e6ed;
   --input: #e5e5e5;
   --ring: #a1a1a1;
   --chart-1: #d4d4d4;
@@ -87,12 +87,12 @@
   --sidebar-border: #e5e5e5;
   --sidebar-ring: #a1a1a1;
 
-  --bg-surface:     #FFFFFF;
-  --bg-surface-2:   #F8F9FB;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #f8f9fb;
 }
 
 .dark {
-  --background: #0C0F16;
+  --background: #0c0f16;
   --foreground: #fafafa;
   --card: #171717;
   --card-foreground: #fafafa;
@@ -125,8 +125,8 @@
   --sidebar-border: #ffffff1a;
   --sidebar-ring: #737373;
 
-  --bg-surface:     #151922;
-  --bg-surface-2:   #1E2433;
+  --bg-surface: #151922;
+  --bg-surface-2: #1e2433;
 }
 
 @layer base {
@@ -162,7 +162,6 @@
   background: #555;
 }
 
-
 @layer components {
   .surface {
     background: var(--bg-surface);
@@ -177,12 +176,12 @@
     color: var(--text-primary);
   }
   .sidebar-item.active {
-    background: #EBF2FF;
-    color: #4D8EF7;
+    background: #ebf2ff;
+    color: #4d8ef7;
   }
   .dark .sidebar-item.active {
-    background: rgba(77,142,247,0.12);
-    color: #78A7F9;
+    background: rgba(77, 142, 247, 0.12);
+    color: #78a7f9;
   }
 
   /* Sonner toast styling */

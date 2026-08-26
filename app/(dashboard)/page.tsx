@@ -17,7 +17,7 @@ import Can from "@/components/guards/CanView";
 export default function Home() {
   const router = useRouter();
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6">
       <SiteHeader title="Dashboard">
         <Can permissions={[Permissions.WebsiteAudits.Create]} require="any">
           <Button
