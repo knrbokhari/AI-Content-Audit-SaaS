@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { KPICard } from "../ui/kpi-card";
 import { Users, DollarSign, TrendingUp, User } from "lucide-react";
 import { getAdminDashboardReport } from "@/services/api";
+import { KPICardLoading } from "../ui/skeleton";
 
 interface Data {
   total_user: number;
@@ -29,6 +30,17 @@ const AdminDashboardCard = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <KPICardLoading />
+        <KPICardLoading />
+        <KPICardLoading />
+        <KPICardLoading />
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

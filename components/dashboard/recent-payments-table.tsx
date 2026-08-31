@@ -19,6 +19,7 @@ import { Badge } from "../ui/badge";
 import { useEffect, useState } from "react";
 import { getRecentPayments } from "@/services/api";
 import formatDate from "@/utils/formatDate";
+import { TableSkeleton } from "../ui/skeleton";
 
 interface Payment {
   organization: string;
@@ -89,6 +90,7 @@ export function RecentPaymentsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton items={3} cell={6} />}
         {result.map((p: any, idx) => (
           <TableRow key={idx}>
             <TableCell>{p.planName}</TableCell>

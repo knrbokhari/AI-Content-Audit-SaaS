@@ -10,6 +10,7 @@ import {
 import { getRecentUserRegistrations } from "@/services/api";
 import formatDate from "@/utils/formatDate";
 import { useEffect, useState } from "react";
+import { TableSkeleton } from "../ui/skeleton";
 
 interface User {
   name: string;
@@ -56,6 +57,7 @@ export function LatestUserRegistrationsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton items={3} cell={6} />}
         {result.map((p: User, idx) => (
           <TableRow key={idx}>
             <TableCell>{p.name}</TableCell>

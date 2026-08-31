@@ -12,6 +12,7 @@ import { getRecentAudit } from "@/services/api";
 import { Button } from "../ui/button";
 import formatDate from "@/utils/formatDate";
 import Link from "next/link";
+import { TableSkeleton } from "../ui/skeleton";
 
 interface Audit {
   id: number;
@@ -54,6 +55,7 @@ export function RecentWebsiteAuditsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton items={3} cell={6} />}
         {result.map((a, idx) => (
           <TableRow key={idx}>
             <TableCell>{a.url}</TableCell>

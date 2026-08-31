@@ -27,6 +27,8 @@ import { Card } from "../ui/card";
 import formatDate from "@/utils/formatDate";
 import Can from "../guards/CanView";
 import { Permissions } from "@/lib/permissions";
+import Pagination from "../ui/pagination";
+import { TableSkeleton } from "../ui/skeleton";
 
 interface Permission {
   id: number | string;
@@ -42,6 +44,12 @@ interface Permission {
 
 export const PermissionList = () => {
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [paginatorInfo, setPagination] = useState<{
+    total: number;
+    currentPage: number;
+    perPage: number;
+  } | null>(null);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedPermission, setSelectedPermission] =
@@ -52,8 +60,10 @@ export const PermissionList = () => {
   const fetchPermissions = async () => {
     try {
       setLoading(true);
-      const data = await getPermissions();
-      setPermissions(data?.data);
+      const res = await getPermissions({ page, limit: 15 });
+      const { data, total, currentPage, perPage } = res;
+      setPagination({ total, currentPage, perPage });
+      setPermissions(data);
     } catch (error) {
       console.error("Error fetching permissions:", error);
       toast.error("Failed to fetch permissions");
@@ -64,7 +74,7 @@ export const PermissionList = () => {
 
   useEffect(() => {
     fetchPermissions();
-  }, []);
+  }, [page]);
 
   const handleEdit = (id: number | string) => {
     router.push(`/permission/${id}/edit`);
@@ -102,6 +112,10 @@ export const PermissionList = () => {
     );
   }
 
+  function onPagination(current: number) {
+    setPage(current);
+  }
+
   return (
     <div>
       <Card className="!p-4">
@@ -113,18 +127,13 @@ export const PermissionList = () => {
               <TableHead>Resource</TableHead>
               <TableHead>Permission</TableHead>
               <TableHead>Created At</TableHead>
-              <Can
-                permissions={[
-                  Permissions.Permission.Update,
-                  Permissions.Permission.Update,
-                ]}
-                require="any"
-              >
+              <Can permissions={[Permissions.Permission.Update]} require="any">
                 <TableHead>Action</TableHead>
               </Can>
             </TableRow>
           </TableHeader>
           <TableBody>
+            {loading && <TableSkeleton items={15} cell={7} />}
             {permissions.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center">
@@ -174,6 +183,18 @@ export const PermissionList = () => {
             )}
           </TableBody>
         </Table>
+
+        {!!paginatorInfo?.total && (
+          <div className="flex items-center justify-end">
+            <Pagination
+              total={paginatorInfo.total}
+              current={paginatorInfo.currentPage}
+              pageSize={paginatorInfo.perPage}
+              onChange={onPagination}
+              showLessItems
+            />
+          </div>
+        )}
       </Card>
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

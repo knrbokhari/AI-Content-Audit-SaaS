@@ -24,6 +24,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Card } from "../ui/card";
+import Pagination from "../ui/pagination";
+import { TableSkeleton } from "../ui/skeleton";
 
 export interface Role {
   id: number | string;
@@ -33,6 +35,12 @@ export interface Role {
 
 export const RoleList = () => {
   const [roles, setRoles] = useState<Role[]>([]);
+  const [paginatorInfo, setPagination] = useState<{
+    total: number;
+    currentPage: number;
+    perPage: number;
+  } | null>(null);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -42,8 +50,10 @@ export const RoleList = () => {
   const fetchRoles = async () => {
     try {
       setLoading(true);
-      const data = await getRoles();
-      setRoles(data?.data);
+      const res = await getRoles({ page, limit: 10 });
+      const { data, total, currentPage, perPage } = res;
+      setPagination({ total, currentPage, perPage });
+      setRoles(data);
     } catch (error) {
       console.error("Error fetching roles:", error);
       toast.error("Failed to fetch roles");
@@ -52,10 +62,9 @@ export const RoleList = () => {
     }
   };
 
-
   useEffect(() => {
     fetchRoles();
-  }, []);
+  }, [page]);
 
   const handleEdit = (id: number | string) => {
     router.push(`/role/${id}/edit`);
@@ -85,68 +94,84 @@ export const RoleList = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-10">
-        <LoadingSpinner />
-      </div>
-    );
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center py-10">
+  //       <LoadingSpinner />
+  //     </div>
+  //   );
+  // }
+
+  function onPagination(current: number) {
+    setPage(current);
   }
 
   return (
     <div>
       <Card className="!p-4">
         <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>SL</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Is System</TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {roles.length === 0 ? (
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={3} className="text-center">
-                No roles found
-              </TableCell>
+              <TableHead>SL</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Is System</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
-          ) : (
-            roles.map((role, index) => (
-              <TableRow key={role.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{role.name}</TableCell>
-                <TableCell>
-                  {role.isSystem ? (
-                    <span className="text-green-600 font-medium">Yes</span>
-                  ) : (
-                    <span className="text-gray-600">No</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(role.id)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDeleteClick(role)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
+          </TableHeader>
+          <TableBody>
+            {loading && <TableSkeleton items={5} cell={4} />}
+            {roles.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={3} className="text-center">
+                  No roles found
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : (
+              roles.map((role, index) => (
+                <TableRow key={role.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{role.name}</TableCell>
+                  <TableCell>
+                    {role.isSystem ? (
+                      <span className="text-green-600 font-medium">Yes</span>
+                    ) : (
+                      <span className="text-gray-600">No</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(role.id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDeleteClick(role)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+        {!!paginatorInfo?.total && (
+          <div className="flex items-center justify-end">
+            <Pagination
+              total={paginatorInfo.total}
+              current={paginatorInfo.currentPage}
+              pageSize={paginatorInfo.perPage}
+              onChange={onPagination}
+              showLessItems
+            />
+          </div>
+        )}
       </Card>
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { getWebsiteAudits } from "@/services/api";
 import { Button } from "../ui/button";
 import formatDate from "@/utils/formatDate";
+import { TableSkeleton } from "../ui/skeleton";
 
 interface Audit {
   organization: string;
@@ -86,13 +87,13 @@ export function WebsiteAuditsList() {
     router.push(`/website-audits/${id}/details`);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-10">
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center py-10">
+  //       <LoadingSpinner />
+  //     </div>
+  //   );
+  // }
 
   return (
     <Card>
@@ -109,6 +110,7 @@ export function WebsiteAuditsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {loading && <TableSkeleton items={3} cell={6} />}
             {audits?.map((a, idx) => (
               <TableRow key={idx}>
                 <TableCell>{a.url}</TableCell>

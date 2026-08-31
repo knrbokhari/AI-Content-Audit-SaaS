@@ -12,6 +12,7 @@ import { getRecentInvoice } from "@/services/api";
 import { Button } from "../ui/button";
 import formatDate from "@/utils/formatDate";
 import Link from "next/link";
+import { TableSkeleton } from "../ui/skeleton";
 
 interface Audit {
   stripeInvoiceId: string;
@@ -52,6 +53,7 @@ export function RecentInvoiceTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton items={3} cell={5} />}
         {result.map((a, idx) => (
           <TableRow key={idx}>
             <TableCell>{a.stripeInvoiceId}</TableCell>

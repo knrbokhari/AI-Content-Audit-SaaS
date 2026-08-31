@@ -41,7 +41,7 @@ export function KPICard({
           <span>{title}</span>
         </CardTitle>
 
-        {percentage !== undefined && (
+        {!!percentage && (
           <Badge
             variant={isPositive ? "default" : "destructive"}
             className="gap-1 font-medium"

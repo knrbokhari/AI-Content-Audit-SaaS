@@ -15,6 +15,7 @@ import PlanFormModal from "./plan-form";
 import { LoadingSpinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { getPlans } from "@/services/api";
+import { TableSkeleton } from "../ui/skeleton";
 
 const PlanList = () => {
   const [isPlanData, setIsPlanData] = useState<any>(null);
@@ -38,13 +39,13 @@ const PlanList = () => {
     fetchPlans();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-10">
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center py-10">
+  //       <LoadingSpinner />
+  //     </div>
+  //   );
+  // }
 
   const toggleActive = (id: number) => {
     // setPlans((prev) =>
@@ -56,7 +57,7 @@ const PlanList = () => {
 
   return (
     <>
-      <Card>
+      <Card className="!p-4">
         <Table>
           <TableHeader>
             <TableRow>
@@ -69,6 +70,7 @@ const PlanList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {loading && <TableSkeleton items={5} cell={6} />}
             {plans.map((plan) => (
               <TableRow key={plan.id}>
                 <TableCell>{plan.name}</TableCell>

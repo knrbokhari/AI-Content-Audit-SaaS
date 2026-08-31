@@ -18,6 +18,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { useEffect, useState } from "react";
 import { getRecentOrganizations } from "@/services/api";
+import { TableSkeleton } from "../ui/skeleton";
 
 interface Org {
   name: string;
@@ -93,6 +94,7 @@ export function RecentOrganizationsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {loading && <TableSkeleton items={3} cell={7} />}
         {result.map((org: any, idx) => (
           <TableRow key={idx}>
             <TableCell>{org.name}</TableCell>

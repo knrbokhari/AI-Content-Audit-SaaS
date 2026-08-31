@@ -17,11 +17,16 @@ import { useState } from "react";
 import { Card } from "../ui/card";
 import { LoadingSpinner } from "../ui/spinner";
 import { getOrganizations } from "@/services/api";
+import Pagination from "../ui/pagination";
+import { TableSkeleton } from "../ui/skeleton";
 
 const OrganizationsList = () => {
-  // Dummy data – replace with real API data
   const [orgs, setOrgs] = useState([]);
-  const [pagination, setPagination] = useState({});
+  const [paginatorInfo, setPagination] = useState<{
+    total: number;
+    currentPage: number;
+    perPage: number;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
@@ -29,9 +34,9 @@ const OrganizationsList = () => {
     try {
       setLoading(true);
       const res = await getOrganizations({ page, size: 10 });
-      const { data, ...rest } = res;
+      const { data, total, currentPage, perPage } = res;
+      setPagination({ total, currentPage, perPage });
       setOrgs(data);
-      setPagination(rest);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -51,7 +56,7 @@ const OrganizationsList = () => {
   }
 
   return (
-    <Card className="mt-10">
+    <Card className="mt-10 !p-4">
       <Table>
         <TableHeader>
           <TableRow>
@@ -66,6 +71,7 @@ const OrganizationsList = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {loading && <TableSkeleton items={10} cell={7} />}
           {orgs.map((org: any) => (
             <TableRow key={org.id}>
               <TableCell>{org.name}</TableCell>
@@ -102,6 +108,17 @@ const OrganizationsList = () => {
           ))}
         </TableBody>
       </Table>
+      {!!paginatorInfo?.total && (
+        <div className="flex items-center justify-end">
+          <Pagination
+            total={paginatorInfo.total}
+            current={paginatorInfo.currentPage}
+            pageSize={paginatorInfo.perPage}
+            onChange={(current: number) => setPage(current)}
+            showLessItems
+          />
+        </div>
+      )}
     </Card>
   );
 };
