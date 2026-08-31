@@ -6,6 +6,8 @@ import "./globals.css";
 import { useAtom } from "jotai";
 import { brandAtom } from "@/atoms/brandAtom";
 import { useEffect } from "react";
+import { Toaster } from "@/components/ui/sonner";
+// import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +41,7 @@ export default function RootLayout({
     if (secondary) document.documentElement.style.setProperty("--brand-secondary", secondary);
     if (primaryDark) document.documentElement.style.setProperty("--brand-primary-dark", primaryDark);
     if (secondaryDark) document.documentElement.style.setProperty("--brand-secondary-dark", secondaryDark);
+    console.log(branding)
   }, [branding?.primaryColor, branding?.secondaryColor, branding?.primaryColorDark, branding?.secondaryColorDark]);
 
 
@@ -48,7 +51,17 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>{children}</body>
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {/* <ThemeProvider
+          attribute="class"
+          // defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        > */}
+          {children}
+          <Toaster />
+        {/* </ThemeProvider> */}
+      </body>
     </html>
   );
 }

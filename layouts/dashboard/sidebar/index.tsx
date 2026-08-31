@@ -1,11 +1,11 @@
-"use client"
+/* eslint-disable react/jsx-key */
+"use client";
 
 /* eslint-disable react-hooks/static-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { clsx } from "clsx";
 import {
-  Shield,
   LayoutDashboard,
   Users,
   Building2,
@@ -19,23 +19,139 @@ import {
   CreditCard,
   ChevronDown,
   PencilSparkles,
+  UserRoundCog,
+  MonitorCog,
+  UserRoundCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Avatar from "@/components/common/Avatar";
+import { useAtom } from "jotai";
+import { userAtom } from "@/atoms/userAtom";
+import { Permissions } from "@/lib/permissions";
+import Can from "@/components/guards/CanView";
+
+type MenuItemType = {
+  label: string;
+  icon: React.ElementType;
+  to: string;
+  permissions: string[];
+  require: "any" | "all";
+};
 
 const MENU = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/" },
-  { label: "Organizations", icon: Building2, to: "/organizations" },
-  { label: "Customers", icon: Briefcase, to: "/customers" },
-  { label: "Subscriptions", icon: CreditCard, to: "/subscriptions" },
-  { label: "Branding", icon: Palette, to: "/branding" },
-  { label: "Team", icon: Users, to: "/users" },
-  { label: "Reports", icon: BarChart3, to: "/reports" },
-  { label: "Settings", icon: Settings, to: "/settings" },
+  {
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    to: "/",
+    permissions: [Permissions.Dashboard.View, Permissions.AdminDashboard.View],
+    require: "any",
+  },
+  {
+    label: "Roles",
+    icon: UserRoundCog,
+    to: "/role",
+    permissions: [Permissions.Role.View],
+    require: "all",
+  },
+  {
+    label: "Resources",
+    icon: MonitorCog,
+    to: "/resource",
+    permissions: [Permissions.Resource.View],
+    require: "all",
+  },
+  {
+    label: "Permissions",
+    icon: UserRoundCheck,
+    to: "/permission",
+    permissions: [Permissions.Permission.View],
+    require: "all",
+  },
+  {
+    label: "Organizations",
+    icon: Building2,
+    to: "/organizations",
+    permissions: [
+      Permissions.Organizations.View,
+      Permissions.Organizations.Delete,
+    ],
+    require: "all",
+  },
+  {
+    label: "Website Audits",
+    icon: Building2,
+    to: "/website-audits",
+    permissions: [Permissions.WebsiteAudits.View],
+    require: "all",
+  },
+  {
+    label: "Customers",
+    icon: Briefcase,
+    to: "/customers",
+    permissions: [Permissions.Customers.View],
+    require: "all",
+  },
+  {
+    label: "Subscriptions",
+    icon: CreditCard,
+    to: "/subscriptions-list",
+    permissions: [Permissions.AdminSubscriptions.View],
+    require: "all",
+  },
+  {
+    label: "Subscriptions",
+    icon: CreditCard,
+    to: "/subscriptions",
+    permissions: [Permissions.Subscriptions.View],
+    require: "all",
+  },
+  {
+    label: "Plan",
+    icon: CreditCard,
+    to: "/plan",
+    permissions: [Permissions.Plans.View, Permissions.Settings.Create],
+    require: "all",
+  },
+  {
+    label: "Branding",
+    icon: Palette,
+    to: "/branding",
+    permissions: [Permissions.Branding.View],
+    require: "all",
+  },
+  // {
+  //   label: "Team",
+  //   icon: Users,
+  //   to: "/users",
+  //   permissions: [Permissions.Team.View],
+  //   require: "all",
+  // },
+  {
+    label: "Reports",
+    icon: BarChart3,
+    to: "/reports",
+    permissions: [Permissions.Reports.View],
+    require: "all",
+  },
+  // {
+  //   label: "Settings",
+  //   icon: Settings,
+  //   to: "/settings",
+  //   permissions: [Permissions.Settings.View],
+  //   require: "all",
+  // },
 ];
 
-const MenuItem = ({ item, collapsed, isActive }: any) => (
+const MenuItem = ({
+  item,
+  collapsed,
+  isActive,
+}: {
+  item: MenuItemType;
+  collapsed: boolean;
+  isActive: boolean;
+}) => (
   <Link
     href={item.to}
     className={clsx("sidebar-item", isActive && "active")}
@@ -45,18 +161,18 @@ const MenuItem = ({ item, collapsed, isActive }: any) => (
     {!collapsed && <span>{item.label}</span>}
   </Link>
 );
-const useAuth = () => {
-  return {};
-};
+
 const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
-  const { user, logout, primaryRole, hasRole }: any = useAuth();
+  const [currentUser, setUser] = useAtom(userAtom);
   const [showProfile, setShowProfile] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const menu = MENU;
 
   const handleLogout = () => {
-    logout();
+    setUser(null);
+    localStorage.removeItem("auth_token");
     router.push("/login");
   };
 
@@ -95,8 +211,18 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
 
       {/* Nav */}
       <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto">
-        {menu.map((item) => (
-          <MenuItem key={item.to} item={item} collapsed={collapsed} />
+        {menu.map((item: any) => (
+          <Can
+            key={item.to}
+            permissions={item.permissions}
+            require={item.require}
+          >
+            <MenuItem
+              item={item}
+              collapsed={collapsed}
+              isActive={pathname === item.to}
+            />
+          </Can>
         ))}
       </nav>
 
@@ -115,28 +241,34 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
             collapsed && "justify-center",
           )}
         >
-          <Avatar name={"user?.fullName"} size="sm" />
+          <Avatar name={currentUser?.name} size="sm" />
           {!collapsed && (
             <>
               <div className="flex-1 text-left min-w-0">
-                <p className="text-xs font-600 truncate">Knr Naeem</p>
-                <p className="text-xs truncate">naeem@email.com</p>
+                <p className="text-xs font-600 truncate">{currentUser?.name}</p>
+                <p className="text-xs truncate">{currentUser?.email}</p>
               </div>
-              <ChevronDown size={13} className={clsx('shrink-0 transition-transform', showProfile && 'rotate-180')} />
+              <ChevronDown
+                size={13}
+                className={clsx(
+                  "shrink-0 transition-transform",
+                  showProfile && "rotate-180",
+                )}
+              />
             </>
           )}
         </button>
 
         {showProfile && !collapsed && (
           <div className="mt-1 space-y-0.5 animate-fade-in">
-            <Link
+            {/* <Link
               href="/profile"
               onClick={() => setShowProfile(false)}
               className="sidebar-item text-xs"
             >
               <Users size={14} />
               Edit Profile
-            </Link>
+            </Link> */}
             <button
               onClick={handleLogout}
               className="sidebar-item text-xs w-full text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"

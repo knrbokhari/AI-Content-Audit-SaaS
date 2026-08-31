@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { atom, } from 'jotai';
 
-export const userAtom = atom({ user: {}, isAuthenticated: false, errors: null });
+export const userAtom =  atom<any | null>(null);
