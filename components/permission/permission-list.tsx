@@ -104,13 +104,13 @@ export const PermissionList = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-10">
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center py-10">
+  //       <LoadingSpinner />
+  //     </div>
+  //   );
+  // }
 
   function onPagination(current: number) {
     setPage(current);

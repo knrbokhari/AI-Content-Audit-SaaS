@@ -266,7 +266,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const [currentUser, setUser] = useAtom(userAtom);
+  const [userType, setUserType] = useState("admin");
   const [permissions, setPermissions] = useAtom(permissionsAtom);
 
   const router = useRouter();
@@ -275,8 +275,8 @@ export function LoginForm({
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "superadmin@admin.com",
+      password: "12345678",
     },
 
     validationSchema: Yup.object({
@@ -290,22 +290,25 @@ export function LoginForm({
     }),
 
     onSubmit: async (values) => {
-      const res = await apiLogin(values);
-      if (res?.requires2FA) {
-        QRCode.toDataURL(res?.otpauth_url, (err, data_url) => {
-          setAuthedData({
-            ...res,
-            data_url,
+      try {
+        const res = await apiLogin(values);
+        if (res?.requires2FA) {
+          QRCode.toDataURL(res?.otpauth_url, (err, data_url) => {
+            setAuthedData({
+              ...res,
+              data_url,
+            });
           });
-        });
-        setStep("2fa");
-      } else {
-        // 2FA disabled — already logged in by AuthContext, navigate directly
-        toast.success("Welcome back!");
-        localStorage.setItem("auth_token", res?.token);
-        // setUser({ user: res?.user, isAuthenticated: true, errors: null });
-        setPermissions(res?.permissions || []);
-        router.push("/");
+          setStep("2fa");
+        } else {
+          // 2FA disabled — already logged in by AuthContext, navigate directly
+          toast.success("Welcome back!");
+          localStorage.setItem("auth_token", res?.token);
+          setPermissions(res?.permissions || []);
+          router.push("/");
+        }
+      } catch (error) {
+        toast.error("Invalid credentials");
       }
     },
   });
@@ -315,10 +318,40 @@ export function LoginForm({
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
-
           <p className="text-sm text-balance text-muted-foreground">
             Enter your email below to login to your account
           </p>
+          <div className="w-full mt-4">
+            <p className="mb-2 text-left text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/80">
+              Demo account
+            </p>
+            <div className="flex items-center gap-1 rounded-xl border border-border bg-muted/70 p-1">
+              <Button
+                type="button"
+                variant={userType === "admin" ? "default" : "outline"}
+                size="sm"
+                className={cn("flex-1 rounded-md border-0 shadow-none")}
+                onClick={() => {
+                  setUserType("admin");
+                  formik.handleChange("email")("superadmin@admin.com");
+                }}
+              >
+                Admin
+              </Button>
+              <Button
+                type="button"
+                variant={userType === "user" ? "default" : "outline"}
+                size="sm"
+                className={cn("flex-1 rounded-md border-0 shadow-none")}
+                onClick={() => {
+                  setUserType("user");
+                  formik.handleChange("email")("ogadmin@og.com");
+                }}
+              >
+                User
+              </Button>
+            </div>
+          </div>
         </div>
         {step === "login" ? (
           <form
