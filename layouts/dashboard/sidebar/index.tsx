@@ -120,6 +120,13 @@ const MENU = [
     permissions: [Permissions.Branding.View],
     require: "all",
   },
+  {
+    label: "AI Analytics",
+    icon: BarChart3,
+    to: "/ai-uses",
+    permissions: [Permissions.AIUses.View],
+    require: "all",
+  },
   // {
   //   label: "Team",
   //   icon: Users,

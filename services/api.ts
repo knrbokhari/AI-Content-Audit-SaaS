@@ -383,11 +383,16 @@ export async function deletePermission(id: number | string) {
 }
 
 // ============================================
-// App Endpoints
+// AI Uses Endpoints
 // ============================================
 
-export async function getHello() {
-  const res = await http.get("/");
+export async function getAiUses(params?: any) {
+  const res = await http.get("/ai-uses", { params });
+  return res.data;
+}
+
+export async function getAiUseDetails(id: string | number) {
+  const res = await http.get(`/ai-uses/${id}`);
   return res.data;
 }
 
