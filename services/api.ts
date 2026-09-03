@@ -68,6 +68,15 @@ export async function apiCurrentUser() {
   return res.data;
 }
 
+
+export async function apiChangePassword(payload: {
+  oldPassword: string;
+  newPassword: string;
+}) {
+  const res = await http.post("/auth/change-password", payload);
+  return res.data;
+}
+
 // ============================================
 // Plan Endpoints
 // ============================================
@@ -381,3 +390,4 @@ export async function getHello() {
   const res = await http.get("/");
   return res.data;
 }
+
