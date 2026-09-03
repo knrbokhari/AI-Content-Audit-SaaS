@@ -35,12 +35,20 @@ export async function apiVerifyEmail(payload: { email: string; code: string }) {
   return res.data;
 }
 
+export async function apiVerifyOtp(payload: { email: string; code: string }) {
+  const res = await http.post("/auth/verify-otp", payload);
+  return res.data;
+}
+
 export async function apiResendOtp(payload: { email: string }) {
   const res = await http.post("/auth/resend-otp", payload);
   return res.data;
 }
 
-export async function apiForgotPassword(payload: { email: string }) {
+export async function apiForgotPassword(payload: {
+  email: string;
+  recaptchaToken: string;
+}) {
   const res = await http.post("/auth/forgot-password", payload);
   return res.data;
 }
@@ -49,6 +57,7 @@ export async function apiResetPassword(payload: {
   email: string;
   code: string;
   password: string;
+  recaptchaToken: string;
 }) {
   const res = await http.post("/auth/reset-password", payload);
   return res.data;
