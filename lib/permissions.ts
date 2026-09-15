@@ -101,6 +101,12 @@ export const Permissions = {
     Update: "admin-reports:update",
     Delete: "admin-reports:delete",
   },
+  AIUses: {
+    View: "ai-uses:view",
+    Create: "ai-uses:create",
+    Update: "ai-uses:update",
+    Delete: "ai-uses:delete",
+  },
 
   Users: {
     View: "users:view",

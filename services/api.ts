@@ -35,12 +35,20 @@ export async function apiVerifyEmail(payload: { email: string; code: string }) {
   return res.data;
 }
 
+export async function apiVerifyOtp(payload: { email: string; code: string }) {
+  const res = await http.post("/auth/verify-otp", payload);
+  return res.data;
+}
+
 export async function apiResendOtp(payload: { email: string }) {
   const res = await http.post("/auth/resend-otp", payload);
   return res.data;
 }
 
-export async function apiForgotPassword(payload: { email: string }) {
+export async function apiForgotPassword(payload: {
+  email: string;
+  recaptchaToken: string;
+}) {
   const res = await http.post("/auth/forgot-password", payload);
   return res.data;
 }
@@ -49,6 +57,7 @@ export async function apiResetPassword(payload: {
   email: string;
   code: string;
   password: string;
+  recaptchaToken: string;
 }) {
   const res = await http.post("/auth/reset-password", payload);
   return res.data;
@@ -56,6 +65,15 @@ export async function apiResetPassword(payload: {
 
 export async function apiCurrentUser() {
   const res = await http.get("/auth/me");
+  return res.data;
+}
+
+
+export async function apiChangePassword(payload: {
+  oldPassword: string;
+  newPassword: string;
+}) {
+  const res = await http.post("/auth/change-password", payload);
   return res.data;
 }
 
@@ -365,10 +383,16 @@ export async function deletePermission(id: number | string) {
 }
 
 // ============================================
-// App Endpoints
+// AI Uses Endpoints
 // ============================================
 
-export async function getHello() {
-  const res = await http.get("/");
+export async function getAiUses(params?: any) {
+  const res = await http.get("/ai-uses", { params });
   return res.data;
 }
+
+export async function getAiUseDetails(id: string | number) {
+  const res = await http.get(`/ai-uses/${id}`);
+  return res.data;
+}
+

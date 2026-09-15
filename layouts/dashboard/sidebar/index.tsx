@@ -120,6 +120,13 @@ const MENU = [
     permissions: [Permissions.Branding.View],
     require: "all",
   },
+  {
+    label: "AI Analytics",
+    icon: BarChart3,
+    to: "/ai-uses",
+    permissions: [Permissions.AIUses.View],
+    require: "all",
+  },
   // {
   //   label: "Team",
   //   icon: Users,
@@ -261,14 +268,14 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }: any) => {
 
         {showProfile && !collapsed && (
           <div className="mt-1 space-y-0.5 animate-fade-in">
-            {/* <Link
+            <Link
               href="/profile"
               onClick={() => setShowProfile(false)}
               className="sidebar-item text-xs"
             >
               <Users size={14} />
-              Edit Profile
-            </Link> */}
+              Profile & Settings
+            </Link>
             <button
               onClick={handleLogout}
               className="sidebar-item text-xs w-full text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"

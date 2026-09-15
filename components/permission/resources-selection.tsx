@@ -28,11 +28,13 @@ const PermissionResourceInput = ({
   const fetchResources = async () => {
     try {
       setLoading(true);
-      const data = await getResources();
+      const data = await getResources({ limit: 100 });
       setResources(data?.data);
 
       if (defaultValue) {
-        const selected = data?.data?.find((r: any) => r.id === Number(defaultValue));
+        const selected = data?.data?.find(
+          (r: any) => r.id === Number(defaultValue),
+        );
         if (selected) {
           setValue("resourceId", selected);
         }
